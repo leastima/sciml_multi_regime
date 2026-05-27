@@ -1,0 +1,10 @@
+remote_path = "f007zmd@eniac.cs.dartmouth.edu:/jumbo/yaoqingyang/kenzhong/PINNacle/"
+
+# Exclude patterns (uses gitignore-style files; add your .rsync-exclude here)
+ignorefile_paths = [
+  "/Users/ken/Documents/Research/PINN-archived/PINNacle/.rsync-exclude",
+  ".gitignore"  # If you have a .gitignore, it will also be used for excludes
+]
+
+# Optional: Files to always include when downloading from server (even if excluded)
+# remote_includes = ["some_specific.log"]
