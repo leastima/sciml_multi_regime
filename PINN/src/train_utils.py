@@ -969,6 +969,7 @@ def train(model,
         curriculum_learning(model, x, t, pde_name, pde_params, loss_name, opt_name, opt_params_list,
           n_x, n_t, n_res, num_epochs, device)
 
+    grad_norm = None
     for i in range(num_epochs):
         model.train()
 
@@ -1056,6 +1057,13 @@ def train(model,
     # evaluate training loss
     loss_res, loss_bc, loss_ic = loss_func(x, t, predict(x, t, model))
     loss = loss_res + loss_bc + loss_ic
+
+    if grad_norm is None:
+        grad_norm = 0.0
+        for p in model.parameters():
+            if p.grad is not None:
+                grad_norm += p.grad.norm().item() ** 2
+        grad_norm = grad_norm ** 0.5
 
     wandb.log({'loss': loss.item(),
                'loss_res': loss_res.item(),
