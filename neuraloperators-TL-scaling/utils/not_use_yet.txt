@@ -1,0 +1,681 @@
+
+class HessianCalculator():
+    """Class to calculate Hessian matrix and its trace for neural network analysis"""
+    
+    def __init__(self, params, args=None):
+        """
+        Initialize HessianCalculator
+        
+        Args:
+            params: Configuration parameters (YParams object)
+            args: Optional arguments object
+        """
+        self.params = params
+        
+        # Set device
+        if torch.cuda.is_available():
+            self.device = torch.cuda.current_device()
+        else:
+            self.device = torch.device('cpu')
+        
+        self.params.device = self.device
+        
+        # Set random seed for reproducibility
+        set_seed(self.params, world_size=0)  # No distributed training for Hessian
+        
+        # Initialize model based on config
+        if self.params.model == 'fno':
+            self.model = models.fno.fno(self.params).to(self.device)
+        else:
+            raise ValueError(f"Unsupported model type: {self.params.model}")
+        
+        # Initialize loss function
+        if self.params.loss_func == "mse":
+            self.loss_func = LossMSE(self.params, self.model)
+        else:
+            raise ValueError(f"Unsupported loss function: {self.params.loss_func}")
+        
+        # Set batch size parameters (similar to Trainer class)
+        self.params['global_batch_size'] = self.params.batch_size
+        self.params['local_batch_size'] = self.params.batch_size  # No distributed training for Hessian
+        self.params['global_valid_batch_size'] = self.params.valid_batch_size
+        self.params['local_valid_batch_size'] = self.params.valid_batch_size  # No distributed training
+        
+        # Get model parameters
+        self.model_params = [p for p in self.model.parameters() if p.requires_grad]
+        self.n_params = sum(p.numel() for p in self.model_params)
+        
+        print(f"HessianCalculator initialized with {self.n_params} parameters")
+    
+    def flatten_params(self):
+        """Flatten model parameters into a single vector"""
+        return torch.cat([p.reshape(-1) for p in self.model_params])
+    
+    def unflatten_params(self, flat_params):
+        """Unflatten parameters back to original shapes"""
+        idx = 0
+        unflat_params = []
+        for p in self.model_params:
+            param_size = p.numel()
+            unflat_params.append(flat_params[idx:idx+param_size].view(p.shape))
+            idx += param_size
+        return unflat_params
+    
+    def compute_loss(self, inputs, targets):
+        """Compute total loss for given inputs and targets"""
+        self.model.zero_grad()
+        u = self.model(inputs)
+        
+        loss_data = self.loss_func.data(inputs, u, targets)
+        loss_pde = self.loss_func.pde(inputs, u, targets)
+        loss_bc = self.loss_func.bc(inputs, u, targets)
+        loss = loss_data + loss_bc + loss_pde
+        
+        return loss
+    
+    def compute_gradient(self, inputs, targets):
+        """Compute gradient of loss w.r.t. parameters"""
+        loss = self.compute_loss(inputs, targets)
+        
+        grads = torch.autograd.grad(loss, self.model_params, create_graph=True)
+        grad_flat = torch.cat([g.reshape(-1) for g in grads])
+        
+        return grad_flat, loss
+    
+    def compute_hessian_trace_exact(self, data_loader, max_batches=None):
+        """
+        Compute exact Hessian trace using the formula: Tr(H) = sum_i d²L/dθᵢ²
+        
+        Args:
+            data_loader: DataLoader for computing Hessian
+            max_batches: Maximum number of batches to process (None for all)
+        
+        Returns:
+            trace: Scalar value of Hessian trace
+        """
+        self.model.eval()
+        total_trace = 0.0
+        num_samples = 0
+        
+        for batch_idx, (inputs, targets) in enumerate(data_loader):
+            if max_batches is not None and batch_idx >= max_batches:
+                break
+                
+            if not hasattr(self.loss_func, 'pack_data') or not self.loss_func.pack_data:
+                inputs, targets = inputs.to(self.device), targets.to(self.device)
+            
+            # Compute first-order gradients
+            grad_flat, loss = self.compute_gradient(inputs, targets)
+            
+            # Compute diagonal elements of Hessian (second derivatives)
+            batch_trace = 0.0
+            for i in range(len(grad_flat)):
+                # Compute second derivative w.r.t. parameter i
+                second_deriv = torch.autograd.grad(grad_flat[i], self.model_params, 
+                                                 retain_graph=True, create_graph=False)
+                # Sum diagonal elements
+                for j, param_grad in enumerate(second_deriv):
+                    if param_grad is not None:
+                        batch_trace += param_grad.reshape(-1)[i - sum(p.numel() for p in self.model_params[:j])].item()
+            
+            total_trace += batch_trace
+            num_samples += inputs.size(0)
+        
+        return total_trace / len(data_loader)
+    
+    def compute_hessian_trace_hutchinson(self, data_loader, max_batches=None):
+        """
+        Compute Hessian trace using Hutchinson's estimator: Tr(H) ≈ E[z^T H z] where z ~ N(0,I)
+        More memory efficient for large models.
+        
+        Args:
+            data_loader: DataLoader for computing Hessian
+            max_batches: Maximum number of batches to process
+        
+        Returns:
+            trace: Estimated Hessian trace
+        """
+        self.model.eval()
+        total_trace = 0.0
+        
+        for batch_idx, (inputs, targets) in enumerate(data_loader):
+            if max_batches is not None and batch_idx >= max_batches:
+                break
+                
+            if not hasattr(self.loss_func, 'pack_data') or not self.loss_func.pack_data:
+                inputs, targets = inputs.to(self.device), targets.to(self.device)
+            
+            batch_trace = 0.0
+            
+
+            # Generate random vector z ~ N(0,I)
+            z = torch.randn(self.n_params, device=self.device)
+            
+            # Compute gradient
+            grad_flat, loss = self.compute_gradient(inputs, targets)
+            
+            # Compute Hessian-vector product
+            hvp = torch.autograd.grad(grad_flat, self.model_params, grad_outputs=z, 
+                                    retain_graph=False, create_graph=False)
+            hvp_flat = torch.cat([h.reshape(-1) for h in hvp])
+            
+            # Compute z^T H z
+            batch_trace += torch.dot(z, hvp_flat).item()
+            
+            total_trace += batch_trace 
+        
+        return total_trace / len(data_loader)
+    
+    def compute_hessian_diagonal(self, data_loader, max_batches=None):
+        """
+        Compute diagonal elements of the Hessian matrix
+        
+        Args:
+            data_loader: DataLoader for computing Hessian
+            max_batches: Maximum number of batches to process
+        
+        Returns:
+            hessian_diag: Tensor containing diagonal elements
+        """
+        self.model.eval()
+        hessian_diag = torch.zeros(self.n_params, device=self.device)
+        
+        for batch_idx, (inputs, targets) in enumerate(data_loader):
+            if max_batches is not None and batch_idx >= max_batches:
+                break
+                
+            if not hasattr(self.loss_func, 'pack_data') or not self.loss_func.pack_data:
+                inputs, targets = inputs.to(self.device), targets.to(self.device)
+            
+            # Compute gradient
+            grad_flat, loss = self.compute_gradient(inputs, targets)
+            
+            # Compute diagonal elements
+            for i in range(len(grad_flat)):
+                second_deriv = torch.autograd.grad(grad_flat[i], self.model_params, 
+                                                 retain_graph=True, create_graph=False)
+                idx = 0
+                for j, param_grad in enumerate(second_deriv):
+                    if param_grad is not None:
+                        param_size = self.model_params[j].numel()
+                        if idx <= i < idx + param_size:
+                            hessian_diag[i] += param_grad.reshape(-1)[i - idx].item()
+                        idx += param_size
+        
+        return hessian_diag / len(data_loader)
+    
+    def compute_full_hessian(self, data_loader, max_batches=1):
+        """
+        Compute full Hessian matrix (WARNING: Very memory intensive!)
+        Only recommended for small models or single batch.
+        
+        Args:
+            data_loader: DataLoader for computing Hessian
+            max_batches: Maximum number of batches to process
+        
+        Returns:
+            hessian: Full Hessian matrix [n_params x n_params]
+        """
+        if self.n_params > 10000:
+            print(f"Warning: Computing full Hessian for {self.n_params} parameters. This will use significant memory!")
+        
+        self.model.eval()
+        hessian = torch.zeros(self.n_params, self.n_params, device=self.device)
+        
+        for batch_idx, (inputs, targets) in enumerate(data_loader):
+            if batch_idx >= max_batches:
+                break
+                
+            if not hasattr(self.loss_func, 'pack_data') or not self.loss_func.pack_data:
+                inputs, targets = inputs.to(self.device), targets.to(self.device)
+            
+            # Compute gradient
+            grad_flat, loss = self.compute_gradient(inputs, targets)
+            
+            # Compute full Hessian
+            for i in range(len(grad_flat)):
+                second_derivs = torch.autograd.grad(grad_flat[i], self.model_params, 
+                                                  retain_graph=True, create_graph=False)
+                hessian_row = torch.cat([h.reshape(-1) for h in second_derivs])
+                hessian[i] = hessian_row
+        
+        return hessian / max_batches
+    
+    def analyze_hessian_properties(self, data_loader, method='hutchinson', **kwargs):
+        """
+        Analyze Hessian properties including trace, eigenvalue estimates, etc.
+        
+        Args:
+            data_loader: DataLoader for analysis
+            method: Method to use ('hutchinson', 'exact', 'diagonal')
+            **kwargs: Additional arguments for specific methods
+        
+        Returns:
+            dict: Dictionary containing Hessian analysis results
+        """
+        results = {}
+        
+        print(f"Analyzing Hessian properties using {method} method...")
+        
+        if method == 'hutchinson':
+            trace = self.compute_hessian_trace_hutchinson(data_loader, **kwargs)
+            results['trace'] = trace
+            results['avg_curvature'] = trace / self.n_params
+            
+        elif method == 'exact':
+            trace = self.compute_hessian_trace_exact(data_loader, **kwargs)
+            results['trace'] = trace
+            results['avg_curvature'] = trace / self.n_params
+            
+        elif method == 'diagonal':
+            hessian_diag = self.compute_hessian_diagonal(data_loader, **kwargs)
+            results['trace'] = hessian_diag.sum().item()
+            results['avg_curvature'] = results['trace'] / self.n_params
+            results['diagonal_mean'] = hessian_diag.mean().item()
+            results['diagonal_std'] = hessian_diag.std().item()
+            results['diagonal_min'] = hessian_diag.min().item()
+            results['diagonal_max'] = hessian_diag.max().item()
+            
+        elif method == 'full':
+            hessian = self.compute_full_hessian(data_loader, **kwargs)
+            results['trace'] = torch.trace(hessian).item()
+            results['avg_curvature'] = results['trace'] / self.n_params
+            
+            # Compute eigenvalues (expensive!)
+            eigenvals = torch.linalg.eigvals(hessian).real
+            results['eigenval_max'] = eigenvals.max().item()
+            results['eigenval_min'] = eigenvals.min().item()
+            results['condition_number'] = results['eigenval_max'] / max(results['eigenval_min'], 1e-10)
+            results['num_negative_eigenvals'] = (eigenvals < 0).sum().item()
+            
+        print(f"Hessian trace: {results['trace']:.6f}")
+        print(f"Average curvature: {results['avg_curvature']:.6f}")
+        
+        return results
+    
+    def compute_largest_eigenvalue(self, data_loader, max_iterations=30, tolerance=1e-4, max_batches=None):
+        """
+        Compute largest eigenvalue of Hessian using power iteration method
+        More memory efficient than computing full Hessian.
+        
+        Args:
+            data_loader: DataLoader for computing Hessian
+            max_iterations: Maximum number of power iterations
+            tolerance: Convergence tolerance
+            max_batches: Maximum number of batches to process
+        
+        Returns:
+            float: Largest eigenvalue estimate
+        """
+        self.model.eval()
+        
+        # Initialize random vector
+        v = torch.randn(self.n_params, device=self.device)
+        v = v / torch.norm(v)
+        
+        eigenvalue = 0.0
+        
+        for iteration in range(max_iterations):
+            # Compute Hessian-vector product Hv
+            Hv = torch.zeros_like(v)
+            
+            batch_count = 0
+            for batch_idx, (inputs, targets) in enumerate(data_loader):
+                if max_batches is not None and batch_idx >= max_batches:
+                    break
+                    
+                if not hasattr(self.loss_func, 'pack_data') or not self.loss_func.pack_data:
+                    inputs, targets = inputs.to(self.device), targets.to(self.device)
+                
+                # Compute gradient
+                grad_flat, loss = self.compute_gradient(inputs, targets)
+                
+                # Compute Hessian-vector product
+                hvp = torch.autograd.grad(grad_flat, self.model_params, grad_outputs=v, 
+                                        retain_graph=False, create_graph=False)
+                hvp_flat = torch.cat([h.reshape(-1) for h in hvp])
+                
+                Hv += hvp_flat
+                batch_count += 1
+            
+            # Average over batches
+            Hv = Hv / batch_count
+            
+            # Compute eigenvalue estimate
+            new_eigenvalue = torch.dot(v, Hv).item()
+            
+            # Normalize for next iteration
+            Hv_norm = torch.norm(Hv)
+            if Hv_norm > 1e-10:
+                v = Hv / Hv_norm
+            
+            # Check convergence
+            if iteration > 0 and abs(new_eigenvalue - eigenvalue) < tolerance:
+                print(f"Power iteration converged after {iteration+1} iterations")
+                break
+                
+            eigenvalue = new_eigenvalue
+            
+            if iteration % 10 == 0:
+                print(f"Iteration {iteration+1}: λ_max ≈ {eigenvalue:.6f}")
+        
+        return eigenvalue
+    
+    def compute_hessian_sharpness_metrics(self, data_loader, method='auto', **kwargs):
+        """
+        Compute both trace and largest eigenvalue for sharpness analysis
+        
+        Args:
+            data_loader: DataLoader for computing metrics
+            method: 'auto', 'full', or 'efficient'
+            **kwargs: Additional arguments
+        
+        Returns:
+            dict: Dictionary with trace, largest eigenvalue, and derived metrics
+        """
+        results = {}
+        
+        # Determine method based on model size
+        if method == 'auto':
+            method = 'full' if self.n_params <= 10000 else 'efficient'
+        
+        print(f"Computing Hessian sharpness metrics using '{method}' method...")
+        
+        if method == 'full':
+            # Use full Hessian computation
+            hessian_results = self.analyze_hessian_properties(data_loader, method='full', **kwargs)
+            results.update(hessian_results)
+            
+        elif method == 'efficient':
+            # Use efficient methods for large models
+            print("Computing trace using Hutchinson estimator...")
+            hutchinson_kwargs = {k: v for k, v in kwargs.items() if k in ['max_batches']}
+            trace = self.compute_hessian_trace_hutchinson(data_loader, **hutchinson_kwargs)
+            results['trace'] = trace
+            results['avg_curvature'] = trace / self.n_params
+            
+            print("Computing largest eigenvalue using power iteration...")
+            eigenval_kwargs = {k: v for k, v in kwargs.items() if k in ['max_iterations', 'tolerance', 'max_batches']}
+            lambda_max = self.compute_largest_eigenvalue(data_loader, **eigenval_kwargs)
+            results['eigenval_max'] = lambda_max
+        
+        # Compute sharpness metrics
+        if 'trace' in results and 'eigenval_max' in results:
+            results['sharpness_trace'] = results['trace']
+            results['sharpness_eigenval'] = results['eigenval_max']
+            results['eigenval_to_trace_ratio'] = results['eigenval_max'] / max(abs(results['trace']), 1e-10)
+        
+        print(f"Trace (sharpness): {results.get('trace', 'N/A'):.6f}")
+        print(f"λ_max (sharpness): {results.get('eigenval_max', 'N/A'):.6f}")
+        
+        return results
+    
+    def analyze_layer_wise_hessian(self, data_loader, max_batches=None):
+        """
+        Analyze Hessian properties layer by layer
+        
+        Args:
+            data_loader: DataLoader for computing Hessian
+            max_batches: Maximum number of batches to process
+        
+        Returns:
+            dict: Layer-wise analysis results
+        """
+        self.model.eval()
+        results = {}
+        
+        print("\n" + "="*80)
+        print("LAYER-WISE HESSIAN ANALYSIS")
+        print("="*80)
+        print(f"{'Layer Name':<40} {'Parameters':<15} {'Eigenvalues':<15} {'Shape':<20}")
+        print("-"*80)
+        
+        total_params = 0
+        layer_info = []
+        
+        # Analyze each layer
+        for name, param in self.model.named_parameters():
+            if param.requires_grad:
+                num_params = param.numel()
+                total_params += num_params
+                
+                # Store layer info
+                layer_data = {
+                    'name': name,
+                    'num_params': num_params,
+                    'num_eigenvals': num_params,  # Each parameter contributes one eigenvalue
+                    'shape': list(param.shape),
+                }
+                layer_info.append(layer_data)
+                
+                # Print layer statistics
+                shape_str = f"{param.shape}".replace(' ', '')
+                print(f"{name:<40} {num_params:<15,} {num_params:<15,} {shape_str:<20}")
+        
+        print("-"*80)
+        print(f"{'TOTAL':<40} {total_params:<15,} {total_params:<15,} {'N/A':<20}")
+        print("="*80)
+        
+        # Compute layer-wise Hessian diagonal approximation (optional, for small models)
+        if self.n_params <= 50000 and max_batches is not None and max_batches <= 3:
+            print("\nComputing layer-wise Hessian diagonal approximation...")
+            try:
+                layer_hessian_stats = self._compute_layer_hessian_diagonal(data_loader, layer_info, max_batches)
+                results['layer_hessian_stats'] = layer_hessian_stats
+                
+                print("\nLayer-wise Hessian Diagonal Statistics:")
+                print(f"{'Layer Name':<40} {'Mean Curvature':<15} {'Max Curvature':<15} {'Min Curvature':<15}")
+                print("-"*80)
+                
+                for layer_name, stats in layer_hessian_stats.items():
+                    print(f"{layer_name:<40} {stats['mean']:<15.6f} {stats['max']:<15.6f} {stats['min']:<15.6f}")
+                    
+            except Exception as e:
+                print(f"Warning: Could not compute layer-wise Hessian diagonal: {e}")
+        
+        # Store results
+        results['layer_info'] = layer_info
+        results['total_params'] = total_params
+        results['num_layers'] = len(layer_info)
+        
+        return results
+    
+    def _compute_layer_hessian_diagonal(self, data_loader, layer_info, max_batches):
+        """
+        Compute diagonal Hessian statistics for each layer
+        """
+        layer_stats = {}
+        
+        # Process a few batches to get Hessian diagonal
+        batch_count = 0
+        for batch_idx, (inputs, targets) in enumerate(data_loader):
+            if batch_idx >= max_batches:
+                break
+                
+            if not hasattr(self.loss_func, 'pack_data') or not self.loss_func.pack_data:
+                inputs, targets = inputs.to(self.device), targets.to(self.device)
+            
+            # Compute gradient
+            grad_flat, loss = self.compute_gradient(inputs, targets)
+            
+            # Extract gradients for each layer
+            param_idx = 0
+            for layer_data in layer_info:
+                layer_name = layer_data['name']
+                num_params = layer_data['num_params']
+                
+                # Extract layer gradients
+                layer_grad = grad_flat[param_idx:param_idx + num_params]
+                
+                # Compute second derivatives for this layer (approximate)
+                if batch_count == 0:
+                    layer_stats[layer_name] = {
+                        'diagonal_sum': torch.zeros_like(layer_grad),
+                        'count': 0
+                    }
+                
+                # Approximate diagonal Hessian as gradient squared (rough approximation)
+                # For exact computation, we'd need to compute actual second derivatives
+                layer_hessian_diag_approx = layer_grad.abs()  # Use absolute gradient as proxy
+                layer_stats[layer_name]['diagonal_sum'] += layer_hessian_diag_approx
+                layer_stats[layer_name]['count'] += 1
+                
+                param_idx += num_params
+            
+            batch_count += 1
+        
+        # Compute final statistics
+        final_stats = {}
+        for layer_name, stats in layer_stats.items():
+            avg_diag = stats['diagonal_sum'] / stats['count']
+            final_stats[layer_name] = {
+                'mean': avg_diag.mean().item(),
+                'max': avg_diag.max().item(),
+                'min': avg_diag.min().item(),
+                'std': avg_diag.std().item()
+            }
+        
+        return final_stats
+    
+    def print_model_architecture_summary(self):
+        """
+        Print a summary of the model architecture with parameter counts
+        """
+        print("\n" + "="*60)
+        print("MODEL ARCHITECTURE SUMMARY")
+        print("="*60)
+        
+        total_params = 0
+        trainable_params = 0
+        
+        for name, param in self.model.named_parameters():
+            num_params = param.numel()
+            total_params += num_params
+            if param.requires_grad:
+                trainable_params += num_params
+                status = "Trainable"
+            else:
+                status = "Frozen"
+            
+            print(f"{name:<50} {str(param.shape):<20} {num_params:<10,} {status}")
+        
+        print("="*60)
+        print(f"Total parameters: {total_params:,}")
+        print(f"Trainable parameters: {trainable_params:,}")
+        print(f"Non-trainable parameters: {total_params - trainable_params:,}")
+        print("="*60)
+    
+    def load_model(self, checkpoint_path):
+        """
+        Load model weights from checkpoint
+        
+        Args:
+            checkpoint_path: Path to the checkpoint file
+        """
+        print(f"Loading model weights from {checkpoint_path}")
+        checkpoint = torch.load(checkpoint_path, map_location=f'cuda:{torch.cuda.current_device()}' if torch.cuda.is_available() else 'cpu')
+        
+        try:
+            self.model.load_state_dict(checkpoint['model_state'])
+        except:
+            # Handle DistributedDataParallel models
+            new_state_dict = OrderedDict()
+            for key, val in checkpoint['model_state'].items():
+                if key.startswith('module.'):
+                    name = key[7:]  # Remove 'module.' prefix
+                else:
+                    name = key
+                new_state_dict[name] = val
+            self.model.load_state_dict(new_state_dict)
+        
+        print("Model weights loaded successfully")
+    
+    def restore_checkpoint(self, checkpoint_path):
+        """
+        Restore full checkpoint including model state and metadata
+        
+        Args:
+            checkpoint_path: Path to the checkpoint file
+        
+        Returns:
+            dict: Checkpoint metadata (epoch, iters, etc.)
+        """
+        print(f"Restoring checkpoint from {checkpoint_path}")
+        checkpoint = torch.load(checkpoint_path, map_location=f'cuda:{torch.cuda.current_device()}' if torch.cuda.is_available() else 'cpu')
+        
+        try:
+            self.model.load_state_dict(checkpoint['model_state'])
+        except:
+            # Handle DistributedDataParallel models
+            new_state_dict = OrderedDict()
+            for key, val in checkpoint['model_state'].items():
+                if key.startswith('module.'):
+                    name = key[7:]  # Remove 'module.' prefix
+                else:
+                    name = key
+                new_state_dict[name] = val
+            self.model.load_state_dict(new_state_dict)
+        
+        # Return checkpoint metadata
+        metadata = {
+            'epoch': checkpoint.get('epoch', 0),
+            'iters': checkpoint.get('iters', 0)
+        }
+        
+        print(f"Checkpoint restored successfully (epoch: {metadata['epoch']}, iters: {metadata['iters']})")
+        return metadata
+    
+    def load_from_trainer_checkpoint(self, checkpoint_path):
+        """
+        Load model from a Trainer checkpoint and return training metadata
+        
+        Args:
+            checkpoint_path: Path to trainer checkpoint
+            
+        Returns:
+            dict: Training metadata from checkpoint
+        """
+        print(f"Loading from trainer checkpoint: {checkpoint_path}")
+        return self.restore_checkpoint(checkpoint_path)
+    
+    @classmethod
+    def from_trainer(cls, trainer, checkpoint_path=None):
+        """
+        Create HessianCalculator from an existing Trainer instance
+        
+        Args:
+            trainer: Trainer instance
+            checkpoint_path: Optional path to load specific checkpoint
+            
+        Returns:
+            HessianCalculator: Initialized calculator
+        """
+        # Create calculator with trainer's parameters
+        calc = cls(trainer.params)
+        
+        # Load checkpoint if specified
+        if checkpoint_path is not None:
+            calc.load_model(checkpoint_path)
+            
+        return calc
+    
+    @classmethod
+    def from_config(cls, params, checkpoint_path=None):
+        """
+        Create HessianCalculator from config parameters and optionally load checkpoint
+        
+        Args:
+            params: Configuration parameters (YParams object)
+            checkpoint_path: Optional path to model checkpoint
+            
+        Returns:
+            HessianCalculator: Initialized calculator
+        """
+        # Create calculator with parameters
+        calc = cls(params)
+        
+        # Load checkpoint if specified
+        if checkpoint_path is not None:
+            calc.load_model(checkpoint_path)
+        
+        return calc

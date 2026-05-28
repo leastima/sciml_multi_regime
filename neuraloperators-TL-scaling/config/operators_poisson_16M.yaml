@@ -1,0 +1,150 @@
+default: &DEFAULT
+  num_data_workers: 1
+  # model
+  model: 'fno'
+  depth: 5
+  in_dim: 2
+  out_dim: 1
+  dropout: 0
+  # data/domain
+  Lx: !!float 1.0
+  Ly: !!float 1.0
+  nx: 256
+  ny: 256
+  # optimization
+  loss_style: 'mean'
+  loss_func: 'mse'
+  optimizer: 'adam'
+  scheduler: 'none'
+  max_epochs: 500
+  # misc
+  log_to_screen: !!bool True
+  save_checkpoint: !!bool False
+  seed: 0
+  plot_figs: !!bool False
+  pack_data: !!bool False
+  # Weights & Biases
+  entity: 'your_wandb_entity'
+  project: 'your_wandb_project'
+  log_to_wandb: !!bool False
+  distill: !!bool False
+
+poisson: &poisson
+  <<: *DEFAULT
+  nx: 128
+  ny: 128
+  log_to_wandb: !!bool False
+  save_checkpoint: !!bool True
+  max_epochs: 500
+  scheduler: 'cosine'
+  plot_figs: !!bool True
+  loss_style: 'sum'
+  system: 'poisson'
+
+  model: 'fno'
+  layers: [64, 64, 64, 64, 64]
+  modes1: [65, 65, 65, 65]
+  modes2: [65, 65, 65, 65]
+
+  depth: 5
+  in_dim: 4
+  out_dim: 1
+  fc_dim: 128
+  fc_cut: 2
+
+  optimizer: 'adam'
+  resuming: !!bool False
+  pack_data: !!bool False
+  early_stopping: !!bool False
+  patience: 100
+
+############################################
+poisson_scale_k1.0_2.5_val1024_16M: &poisson_scale_k1.0_2.5_val1024_16M
+  <<: *poisson
+  train_path:    './data/poisson/_train_k1.0_2.5_32k.h5'
+  val_path:      './data/poisson/_val_k1.0_2.5_4k.h5'
+  test_path:     './data/poisson/_test_k1.0_2.5_4k.h5'
+  scales_path:   './data/poisson/_train_k1.0_2.5_scales.npy'
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 64
+
+
+poisson_scale_k2.5_5.0_val1024_16M: &poisson_scale_k2.5_5.0_val1024_16M
+  <<: *poisson
+  train_path:    './data/poisson/_train_k2.5_5.0_32k.h5'
+  val_path:      './data/poisson/_val_k2.5_5.0_4k.h5'
+  test_path:     './data/poisson/_test_k2.5_5.0_4k.h5'
+  scales_path:   './data/poisson/_train_k2.5_5.0_scales.npy'
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 64
+
+poisson_scale_k5.0_10.0_val1024_16M: &poisson_scale_k5.0_10.0_val1024_16M
+  <<: *poisson
+  train_path:    './data/poisson/_train_k5.0_10.0_32k.h5'
+  val_path:      './data/poisson/_val_k5.0_10.0_4k.h5'
+  test_path:     './data/poisson/_test_k5.0_10.0_4k.h5'
+  scales_path:   './data/poisson/_train_k5.0_10.0_scales.npy'
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 64
+
+poisson_scale_k10.0_20.0_val1024_16M: &poisson_scale_k10.0_20.0_val1024_16M
+  <<: *poisson
+  train_path:    './data/poisson/_train_k10.0_20.0_32k.h5'
+  val_path:      './data/poisson/_val_k10.0_20.0_4k.h5'
+  test_path:     './data/poisson/_test_k10.0_20.0_4k.h5'
+  scales_path:   './data/poisson/_train_k10.0_20.0_scales.npy'
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 64
+
+
+poisson_scale_k20.0_30.0_val1024_16M: &poisson_scale_k20.0_30.0_val1024_16M
+  <<: *poisson
+  train_path:    './data/poisson/_train_k20.0_30.0_32k.h5'
+  val_path:      './data/poisson/_val_k20.0_30.0_4k.h5'
+  test_path:     './data/poisson/_test_k20.0_30.0_4k.h5'
+  scales_path:   './data/poisson/_train_k20.0_30.0_scales.npy'
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 64
+
+poisson_scale_k30.0_50.0_val1024_16M: &poisson_scale_k30.0_50.0_val1024_16M
+  <<: *poisson
+  train_path:    './data/poisson/_train_k30.0_50.0_32k.h5'
+  val_path:      './data/poisson/_val_k30.0_50.0_4k.h5'
+  test_path:     './data/poisson/_test_k30.0_50.0_4k.h5'
+  scales_path:   './data/poisson/_train_k30.0_50.0_scales.npy'
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 64
+
+poisson_scale_k50.0_100.0_val1024_16M: &poisson_scale_k50.0_100.0_val1024_16M
+  <<: *poisson
+  train_path:    './data/poisson/_train_k50.0_100.0_32k.h5'
+  val_path:      './data/poisson/_val_k50.0_100.0_4k.h5'
+  test_path:     './data/poisson/_test_k50.0_100.0_4k.h5'
+  scales_path:   './data/poisson/_train_k50.0_100.0_scales.npy'
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 64
+
+poisson_scale_k100.0_200.0_val1024_16M: &poisson_scale_k100.0_200.0_val1024_16M
+  <<: *poisson
+  train_path:    './data/poisson/_train_k100.0_200.0_32k.h5'
+  val_path:      './data/poisson/_val_k100.0_200.0_4k.h5'
+  test_path:     './data/poisson/_test_k100.0_200.0_4k.h5'
+  scales_path:   './data/poisson/_train_k100.0_200.0_scales.npy'
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 64

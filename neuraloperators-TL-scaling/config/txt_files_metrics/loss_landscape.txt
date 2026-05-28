@@ -1,0 +1,43 @@
+####(settings for targeting the training) config         max_epochs           bsz             subsample    |       resolution         max_batches       x_min    x_max    y_min    y_max
+
+##### by epochs - different training data sizes
+poisson_scale_k100.0_200.0_val1024_1M                       1000               128               256             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_1M                         50               128                 1             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_1M                           1000               128               256             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_1M                             50               128                 1             25                   4              -1.0     1.0     -1.0     1.0
+
+
+poisson_scale_k100.0_200.0_val1024_1M                        750               128               128             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_1M                         500               128                64             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_1M                         300               128                32             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_1M                         200               128                16             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_1M                         150               128                 8             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_1M                         100               128                 4             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_1M                          75               128                 2             25                   4              -1.0     1.0     -1.0     1.0
+
+poisson_scale_k1.0_2.5_val1024_1M                            750               128               128             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_1M                             500               128                64             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_1M                             300               128                32             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_1M                             200               128                16             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_1M                             150               128                 8             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_1M                             100               128                 4             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_1M                              75               128                 2             25                   4              -1.0     1.0     -1.0     1.0
+
+
+
+
+##### 16M model
+poisson_scale_k1.0_2.5_val1024_16M                         1000              128               256             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_16M                         750               128               128             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_16M                         500               128                64             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_16M                         300               128                32             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_16M                         200               128                16             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_16M                         150               128                 8             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_16M                         100               128                 4             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_16M                         75                128                 2             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k1.0_2.5_val1024_16M                         50                128                 1             25                   4              -1.0     1.0     -1.0     1.0
+
+poisson_scale_k100.0_200.0_val1024_16M                    500               128                64             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_16M                    200               128                16             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_16M                    100               128                 4             25                   4              -1.0     1.0     -1.0     1.0
+poisson_scale_k100.0_200.0_val1024_16M                    50                128                 1             25                   4              -1.0     1.0     -1.0     1.0

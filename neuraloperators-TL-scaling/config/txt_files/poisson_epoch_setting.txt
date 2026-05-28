@@ -1,0 +1,196 @@
+###run_num       max_epochs       batch_size         lr         subsample                   scratch                             config_file                               config
+
+train                 1000          128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 1000          128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 1000          128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 1000          128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 1000          128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 1000          128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 1000          128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 1000          128            1e-3            64              ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 1000          128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 1000          128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 1000          128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 1000          128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 1000          128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 1000          128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 1000          128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 1000          128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 1000          128            1e-3            256             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 1000          128            1e-3            256             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 1000          128            1e-3            256             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 1000          128            1e-3            256             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 1000          128            1e-3            256             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 1000          128            1e-3            256             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 1000          128            1e-3            256             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 1000          128            1e-3            256             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 1000          64            1e-3            512             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 1000          64            1e-3            512             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 1000          64            1e-3            512             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 1000          64            1e-3            512             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 1000          64            1e-3            512             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 1000          64            1e-3            512             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 1000          64            1e-3            512             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 1000          64            1e-3            512             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+
+train                 1000          32            1e-3            1024             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 1000          32            1e-3            1024             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 1000          32            1e-3            1024             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 1000          32            1e-3            1024             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 1000          32            1e-3            1024             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 1000          32            1e-3            1024             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 1000          32            1e-3            1024             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 1000          32            1e-3            1024             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 1000          16            1e-3            2048             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 1000          16            1e-3            2048             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 1000          16            1e-3            2048             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 1000          16            1e-3            2048             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 1000          16            1e-3            2048             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 1000          16            1e-3            2048             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 1000          16            1e-3            2048             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 1000          16            1e-3            2048             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 1000          8            1e-3            4096             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 1000          8            1e-3            4096             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 1000          8            1e-3            4096             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 1000          8            1e-3            4096             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 1000          8            1e-3            4096             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 1000          8            1e-3            4096             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 1000          8            1e-3            4096             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 1000          8            1e-3            4096             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+
+
+train                 50             128            1e-3            1             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 50             128            1e-3            1             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 50             128            1e-3            1             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 50             128            1e-3            1             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 50             128            1e-3            1             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 50             128            1e-3            1             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 50             128            1e-3            1             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 50             128            1e-3            1             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+
+
+#### epochs
+
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 200             128            1e-3            16             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 200             128            1e-3            16             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 200             128            1e-3            16             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 200             128            1e-3            16             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 200             128            1e-3            16             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 200             128            1e-3            16             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 200             128            1e-3            16             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 200             128            1e-3            16             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+
+
+train                 300             128            1e-3            32             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 300             128            1e-3            32             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 300             128            1e-3            32             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 300             128            1e-3            32             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 300             128            1e-3            32             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 300             128            1e-3            32             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 300             128            1e-3            32             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 300             128            1e-3            32             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 500             128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 500             128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 500             128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 500             128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 500             128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 500             128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 500             128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 500             128            1e-3            64             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 750             128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 750             128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+train                 750             128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k5.0_10.0_val1024_1M
+train                 750             128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+train                 750             128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k20.0_30.0_val1024_1M
+train                 750             128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+train                 750             128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k50.0_100.0_val1024_1M
+train                 750             128            1e-3            128             ./results_sameiteration/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+
+
+###### rel-launched
+train                 50              128            1e-3            1               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 75              128            1e-3            2               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 100             128            1e-3            4               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 150             128            1e-3            8               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 200             128            1e-3            16              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 300             128            1e-3            32              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+
+train                 500             128            1e-3            64              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 750             128            1e-3            128             ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 1000            128            1e-3            256             ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k1.0_2.5_val1024_1M
+train                 50              128            1e-3            1               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 75              128            1e-3            2               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 100             128            1e-3            4               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+
+train                 150             128            1e-3            8               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 200             128            1e-3            16              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 300             128            1e-3            32              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 500             128            1e-3            64              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 750             128            1e-3            128             ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+train                 1000            128            1e-3            256             ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+
+###### rel-launched 16M
+train                 50              128            1e-3            1               ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k1.0_2.5_val1024_16M
+train                 1000            128            1e-3            256             ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k1.0_2.5_val1024_16M
+train                 75              128            1e-3            2               ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k1.0_2.5_val1024_16M
+train                 750             128            1e-3            128             ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k1.0_2.5_val1024_16M
+train                 100             128            1e-3            4               ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k1.0_2.5_val1024_16M
+train                 150             128            1e-3            8               ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k1.0_2.5_val1024_16M
+train                 200             128            1e-3            16              ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k1.0_2.5_val1024_16M
+train                 300             128            1e-3            32              ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k1.0_2.5_val1024_16M
+train                 500             128            1e-3            64              ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k1.0_2.5_val1024_16M
+
+train                 50              128            1e-3            1               ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k100.0_200.0_val1024_16M
+train                 75              128            1e-3            2               ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k100.0_200.0_val1024_16M
+train                 100             128            1e-3            4               ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k100.0_200.0_val1024_16M
+train                 150             128            1e-3            8               ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k100.0_200.0_val1024_16M
+train                 200             128            1e-3            16              ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k100.0_200.0_val1024_16M
+train                 300             128            1e-3            32              ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k100.0_200.0_val1024_16M
+train                 500             128            1e-3            64              ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k100.0_200.0_val1024_16M
+train                 750             128            1e-3            128             ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k100.0_200.0_val1024_16M
+train                 1000            128            1e-3            256             ./results_all_downloaded/           ./config/operators_poisson_16M.yaml        poisson_scale_k100.0_200.0_val1024_16M
+
+
+
+###### initialized
+initialization                 750             128            1e-3            128             ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+initialization                 750             128            1e-3            128             ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+initialization                 750             128            1e-3            128             ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+initialization                 750             128            1e-3            128             ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+initialization                 300             128            1e-3            32              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+initialization                 300             128            1e-3            32              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+initialization                 300             128            1e-3            32              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+initialization                 300             128            1e-3            32              ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+initialization                 150             128            1e-3            8               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+initialization                 150             128            1e-3            8               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+initialization                 150             128            1e-3            8               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+initialization                 150             128            1e-3            8               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M
+initialization                 75              128            1e-3            2               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k100.0_200.0_val1024_1M
+initialization                 75              128            1e-3            2               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k30.0_50.0_val1024_1M
+initialization                 75              128            1e-3            2               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k10.0_20.0_val1024_1M
+initialization                 75              128            1e-3            2               ./results_all_downloaded/           ./config/operators_poisson_1M.yaml        poisson_scale_k2.5_5.0_val1024_1M

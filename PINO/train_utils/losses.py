@@ -36,32 +36,21 @@ def FDM_Darcy(u, a, D=1):
     return Du
 
 
-def darcy_loss(u, a):
+def darcy_loss(u, a, f_rhs=1.0):
+    """Relative L2 of strong-form residual Du vs constant forcing f_rhs (same shape as Du).
+
+    Matches -∇·(a∇u)=f_rhs with FDM_Darcy(u,a) for Du.
+    """
     batchsize = u.size(0)
     size = u.size(1)
     u = u.reshape(batchsize, size, size)
     a = a.reshape(batchsize, size, size)
     lploss = LpLoss(size_average=True)
 
-    # index_x = torch.cat([torch.tensor(range(0, size)), (size - 1) * torch.ones(size), torch.tensor(range(size-1, 1, -1)),
-    #                      torch.zeros(size)], dim=0).long()
-    # index_y = torch.cat([(size - 1) * torch.ones(size), torch.tensor(range(size-1, 1, -1)), torch.zeros(size),
-    #                      torch.tensor(range(0, size))], dim=0).long()
-
-    # boundary_u = u[:, index_x, index_y]
-    # truth_u = torch.zeros(boundary_u.shape, device=u.device)
-    # loss_u = lploss.abs(boundary_u, truth_u)
-
     Du = FDM_Darcy(u, a)
-    f = torch.ones(Du.shape, device=u.device)
-    loss_f = lploss.rel(Du, f)
+    f_tensor = torch.full(Du.shape, float(f_rhs), device=u.device, dtype=Du.dtype)
+    loss_f = lploss.rel(Du, f_tensor)
 
-    # im = (Du-f)[0].detach().cpu().numpy()
-    # plt.imshow(im)
-    # plt.show()
-
-    # loss_f = FDM_Darcy(u, a)
-    # loss_f = torch.mean(loss_f)
     return loss_f
 
 

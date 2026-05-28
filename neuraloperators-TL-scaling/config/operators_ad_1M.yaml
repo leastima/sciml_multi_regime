@@ -1,0 +1,164 @@
+default: &DEFAULT
+  num_data_workers: 1
+  # model
+  model: 'fno'
+  depth: 5
+  in_dim: 2
+  out_dim: 1
+  dropout: 0
+  # data/domain
+  Lx: !!float 1.0
+  Ly: !!float 1.0
+  nx: 256
+  ny: 256
+  # optimization
+  loss_style: 'mean'
+  loss_func: 'mse'
+  optimizer: 'adam'
+  scheduler: 'none'
+  lr: !!float 1.0
+  max_epochs: 500
+  max_cosine_lr_epochs: 500
+  batch_size: 25
+  # misc
+  log_to_screen: !!bool True
+  save_checkpoint: !!bool False
+  seed: 0
+  plot_figs: !!bool False
+  pack_data: !!bool False
+  # Weights & Biases
+  # Weights & Biases
+  entity: 'your_wandb_entity'
+  project: 'your_wandb_project'
+  distill: !!bool False
+  subsample: 1
+
+advdiff: &advdiff
+  <<: *DEFAULT
+  batch_size: 128
+  valid_batch_size: 128
+  nx: 128
+  ny: 128
+  log_to_wandb: !!bool True
+  save_checkpoint: !!bool True
+  max_epochs: 500
+  scheduler: 'cosine'
+  plot_figs: !!bool True
+  loss_style: 'sum'
+
+  model: 'fno'
+  layers: [64, 64, 64, 64, 64]
+  modes1: [65, 65, 65, 65]
+  modes2: [65, 65, 65, 65]
+  fc_dim: 128
+
+  in_dim: 6
+  out_dim: 1
+  mode_cut: 16
+  embed_cut: 64
+  fc_cut: 2
+
+  optimizer: 'adam'
+  resuming: !!bool False
+  pack_data: !!bool False
+  early_stopping: !!bool False
+  patience: 100
+
+
+  lr: 1E-3
+
+ad_scale_0p2_0p4_val1024_1M: &ad_scale_0p2_0p4_val1024_1M
+  <<: *advdiff
+  train_path:   './data/advdiff/_train_adr0.2_0.4_32k.h5'
+  val_path:     './data/advdiff/_val_adr0.2_0.4_4k.h5'
+  test_path:    './data/advdiff/_test_adr0.2_0.4_4k.h5'
+  scales_path:  './data/advdiff/_train_adr0.2_0.4_scales.npy'
+  batch_size: 128
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 16
+
+ad_scale_0p4_0p6_val1024_1M: &ad_scale_0p4_0p6_val1024_1M
+  <<: *advdiff
+  train_path:   './data/advdiff/_train_adr0.4_0.6_32k.h5'
+  val_path:     './data/advdiff/_val_adr0.4_0.6_4k.h5'
+  test_path:    './data/advdiff/_test_adr0.4_0.6_4k.h5'
+  scales_path:  './data/advdiff/_train_adr0.4_0.6_scales.npy'
+  batch_size: 128
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 16
+
+ad_scale_0p6_0p8_val1024_1M: &ad_scale_0p6_0p8_val1024_1M
+  <<: *advdiff
+  train_path:   './data/advdiff/_train_adr0.6_0.8_32k.h5'
+  val_path:     './data/advdiff/_val_adr0.6_0.8_4k.h5'
+  test_path:    './data/advdiff/_test_adr0.6_0.8_4k.h5'
+  scales_path:  './data/advdiff/_train_adr0.6_0.8_scales.npy'
+  batch_size: 128
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 16
+
+ad_scale_0p8_1p0_val1024_1M: &ad_scale_0p8_1p0_val1024_1M
+  <<: *advdiff
+  train_path:   './data/advdiff/_train_adr0.8_1.0_32k.h5'
+  val_path:     './data/advdiff/_val_adr0.8_1.0_4k.h5'
+  test_path:    './data/advdiff/_test_adr0.8_1.0_4k.h5'
+  scales_path:  './data/advdiff/_train_adr0.8_1.0_scales.npy'
+  batch_size: 128
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 16
+
+ad_scale_1p0_1p3_val1024_1M: &ad_scale_1p0_1p3_val1024_1M
+  <<: *advdiff
+  train_path:   './data/advdiff/_train_adr1.0_1.3_32k.h5'
+  val_path:     './data/advdiff/_val_adr1.0_1.3_4k.h5'
+  test_path:    './data/advdiff/_test_adr1.0_1.3_4k.h5'
+  scales_path:  './data/advdiff/_train_adr1.0_1.3_scales.npy'
+  batch_size: 128
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 16
+
+ad_scale_1p3_1p7_val1024_1M: &ad_scale_1p3_1p7_val1024_1M
+  <<: *advdiff
+  train_path:   './data/advdiff/_train_adr1.3_1.7_32k.h5'
+  val_path:     './data/advdiff/_val_adr1.3_1.7_4k.h5'
+  test_path:    './data/advdiff/_test_adr1.3_1.7_4k.h5'
+  scales_path:  './data/advdiff/_train_adr1.3_1.7_scales.npy'
+  batch_size: 128
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 16
+
+ad_scale_1p7_2p0_val1024_1M: &ad_scale_1p7_2p0_val1024_1M
+  <<: *advdiff
+  train_path:   './data/advdiff/_train_adr1.7_2.0_32k.h5'
+  val_path:     './data/advdiff/_val_adr1.7_2.0_4k.h5'
+  test_path:    './data/advdiff/_test_adr1.7_2.0_4k.h5'
+  scales_path:  './data/advdiff/_train_adr1.7_2.0_scales.npy'
+  batch_size: 128
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 16
+
+ad_scale_2p0_2p5_val1024_1M: &ad_scale_2p0_2p5_val1024_1M
+  <<: *advdiff
+  train_path:   './data/advdiff/_train_adr2.0_2.5_32k.h5'
+  val_path:     './data/advdiff/_val_adr2.0_2.5_4k.h5'
+  test_path:    './data/advdiff/_test_adr2.0_2.5_4k.h5'
+  scales_path:  './data/advdiff/_train_adr2.0_2.5_scales.npy'
+  batch_size: 128
+  valid_batch_size: 128
+  log_to_wandb: !!bool False
+  mode_cut: 16
+  embed_cut: 16
