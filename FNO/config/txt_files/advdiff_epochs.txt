@@ -1,0 +1,77 @@
+###run_num       max_epochs       batch_size         lr         subsample                   scratch                             config_file                               config
+
+#### <0.2-0.4, 0.4-0.6, 0.6-0.8, 0.8-1.0, 1.0-1.3, 1.3-1.7, 1.7-2.0, 2.0-2.5>
+#### short-list: 0.2-0.4, 0.6-0.8, 1.0-1.3, 1.7-2.0
+#### short-list:
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p2_0p4_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p6_0p8_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p0_1p3_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p7_2p0_val1024_1M
+
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p2_0p4_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p6_0p8_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p0_1p3_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p7_2p0_val1024_1M
+
+train                 300             128            1e-3            32            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p2_0p4_val1024_1M
+train                 300             128            1e-3            32            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p6_0p8_val1024_1M
+train                 300             128            1e-3            32            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p0_1p3_val1024_1M
+train                 300             128            1e-3            32            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p7_2p0_val1024_1M
+
+train                 750             128            1e-3            128           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p2_0p4_val1024_1M
+train                 750             128            1e-3            128           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p6_0p8_val1024_1M
+train                 750             128            1e-3            128           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p0_1p3_val1024_1M
+train                 750             128            1e-3            128           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p7_2p0_val1024_1M
+
+#### others <0.2-0.4, 0.4-0.6, 0.6-0.8, 0.8-1.0, 1.0-1.3, 1.3-1.7, 1.7-2.0, 2.0-2.5>
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p4_0p6_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p8_1p0_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p3_1p7_val1024_1M
+train                 75             128            1e-3            2             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_2p0_2p5_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p2_0p4_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p4_0p6_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p6_0p8_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p8_1p0_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p0_1p3_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p3_1p7_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p7_2p0_val1024_1M
+train                 100             128            1e-3            4             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_2p0_2p5_val1024_1M
+
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p4_0p6_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p8_1p0_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p3_1p7_val1024_1M
+train                 150             128            1e-3            8             ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_2p0_2p5_val1024_1M
+train                 200             128            1e-3            16            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p2_0p4_val1024_1M
+train                 200             128            1e-3            16            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p4_0p6_val1024_1M
+train                 200             128            1e-3            16            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p6_0p8_val1024_1M
+train                 200             128            1e-3            16            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p8_1p0_val1024_1M
+train                 200             128            1e-3            16            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p0_1p3_val1024_1M
+train                 200             128            1e-3            16            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p3_1p7_val1024_1M
+train                 200             128            1e-3            16            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p7_2p0_val1024_1M
+train                 200             128            1e-3            16            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_2p0_2p5_val1024_1M
+
+train                 300             128            1e-3            32            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p4_0p6_val1024_1M
+train                 300             128            1e-3            32            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p8_1p0_val1024_1M
+train                 300             128            1e-3            32            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p3_1p7_val1024_1M
+train                 300             128            1e-3            32            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_2p0_2p5_val1024_1M
+train                 500             128            1e-3            64            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p2_0p4_val1024_1M
+train                 500             128            1e-3            64            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p4_0p6_val1024_1M
+train                 500             128            1e-3            64            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p6_0p8_val1024_1M
+train                 500             128            1e-3            64            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p8_1p0_val1024_1M
+train                 500             128            1e-3            64            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p0_1p3_val1024_1M
+train                 500             128            1e-3            64            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p3_1p7_val1024_1M
+train                 500             128            1e-3            64            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p7_2p0_val1024_1M
+train                 500             128            1e-3            64            ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_2p0_2p5_val1024_1M
+
+train                 750             128            1e-3            128           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p4_0p6_val1024_1M
+train                 750             128            1e-3            128           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p8_1p0_val1024_1M
+train                 750             128            1e-3            128           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p3_1p7_val1024_1M
+train                 750             128            1e-3            128           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_2p0_2p5_val1024_1M
+train                 1000          128            1e-3            256           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p2_0p4_val1024_1M
+train                 1000          128            1e-3            256           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p4_0p6_val1024_1M
+train                 1000          128            1e-3            256           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p6_0p8_val1024_1M
+train                 1000          128            1e-3            256           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_0p8_1p0_val1024_1M
+train                 1000          128            1e-3            256           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p0_1p3_val1024_1M
+train                 1000          128            1e-3            256           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p3_1p7_val1024_1M
+train                 1000          128            1e-3            256           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_1p7_2p0_val1024_1M
+train                 1000          128            1e-3            256           ./results_sameiteration/           ./config/operators_ad_1M.yaml                     ad_scale_2p0_2p5_val1024_1M

@@ -1,0 +1,133 @@
+####(settings for targeting the training) config         max_epochs           bsz             subsample    |       grid         max_batches       radius
+
+##### by epochs - different training data sizes
+poisson_scale_k100.0_200.0_val1024_1M                       1000               128               256             400                   4              1.0
+poisson_scale_k100.0_200.0_val1024_1M                         50               128                 1             400                   4              1.0
+poisson_scale_k1.0_2.5_val1024_1M                           1000               128               256             400                   4              1.0
+poisson_scale_k1.0_2.5_val1024_1M                             50               128                 1             400                   4              1.0
+
+
+
+##### 16M model
+poisson_scale_k1.0_2.5_val1024_16M                         1000              128               256             400                   4              1.0
+poisson_scale_k1.0_2.5_val1024_16M                         750               128               128             400                   4              1.0
+poisson_scale_k1.0_2.5_val1024_16M                         300               128                32             400                   4              1.0
+poisson_scale_k1.0_2.5_val1024_16M                         200               128                16             400                   4              1.0
+poisson_scale_k1.0_2.5_val1024_16M                         150               128                 8             400                   4              1.0
+poisson_scale_k1.0_2.5_val1024_16M                         100               128                 4             400                   4              1.0
+poisson_scale_k1.0_2.5_val1024_16M                         75                128                 2             400                   4              1.0
+poisson_scale_k100.0_200.0_val1024_16M                    200               128                16             400                   4              1.0
+poisson_scale_k100.0_200.0_val1024_16M                    100               128                 4             400                   4              1.0
+
+
+poisson_scale_k1.0_2.5_val1024_16M                          500               128                64             100                   4              1.0
+poisson_scale_k1.0_2.5_val1024_16M                          50                128                 1             100                   4              1.0
+poisson_scale_k100.0_200.0_val1024_16M                      500               128                64             100                   4              1.0
+poisson_scale_k100.0_200.0_val1024_16M                      50                128                 1             100                   4              1.0
+
+poisson_scale_k100.0_200.0_val1024_1M                       1000               128               256             100                   4              1.0
+poisson_scale_k100.0_200.0_val1024_1M                         50               128                 1             100                   4              1.0
+poisson_scale_k1.0_2.5_val1024_1M                           1000               128               256             100                   4              1.0
+poisson_scale_k1.0_2.5_val1024_1M                             50               128                 1             100                   4              1.0
+
+
+
+
+
+
+
+
+##### 1M 
+poisson_scale_k100.0_200.0_val1024_1M                        750               128               128             100                   4              0.5
+poisson_scale_k100.0_200.0_val1024_1M                         300               128                32             100                   4             0.5
+poisson_scale_k100.0_200.0_val1024_1M                         150               128                 8             100                   4             0.5
+poisson_scale_k100.0_200.0_val1024_1M                          75               128                 2             100                   4             0.5
+poisson_scale_k30.0_50.0_val1024_1M                        750               128               128             100                   4              0.5
+poisson_scale_k30.0_50.0_val1024_1M                         300               128                32             100                   4              0.5
+poisson_scale_k30.0_50.0_val1024_1M                         150               128                 8             100                   4              0.5
+poisson_scale_k30.0_50.0_val1024_1M                          75               128                 2             100                   4              0.5
+poisson_scale_k10.0_20.0_val1024_1M                        750               128               128             100                   4              0.5
+poisson_scale_k10.0_20.0_val1024_1M                         300               128                32             100                   4              0.5
+poisson_scale_k10.0_20.0_val1024_1M                         150               128                 8             100                   4              0.5
+poisson_scale_k10.0_20.0_val1024_1M                          75               128                 2             100                   4              0.5
+poisson_scale_k2.5_5.0_val1024_1M                        750               128               128             100                   4              0.5
+poisson_scale_k2.5_5.0_val1024_1M                         300               128                32             100                   4              0.5
+poisson_scale_k2.5_5.0_val1024_1M                         150               128                 8             100                   4              0.5
+poisson_scale_k2.5_5.0_val1024_1M                          75               128                 2             100                   4              0.5
+
+
+poisson_scale_k100.0_200.0_val1024_1M                        750               128               128             100                   4              2.0
+poisson_scale_k100.0_200.0_val1024_1M                         300               128                32             100                   4             2.0
+poisson_scale_k100.0_200.0_val1024_1M                         150               128                 8             100                   4             2.0
+poisson_scale_k100.0_200.0_val1024_1M                          75               128                 2             100                   4             2.0
+poisson_scale_k30.0_50.0_val1024_1M                        750               128               128             100                   4              2.0
+poisson_scale_k30.0_50.0_val1024_1M                         300               128                32             100                   4              2.0
+poisson_scale_k30.0_50.0_val1024_1M                         150               128                 8             100                   4              2.0
+poisson_scale_k30.0_50.0_val1024_1M                          75               128                 2             100                   4              2.0
+poisson_scale_k10.0_20.0_val1024_1M                        750               128               128             100                   4              2.0
+poisson_scale_k10.0_20.0_val1024_1M                         300               128                32             100                   4              2.0
+poisson_scale_k10.0_20.0_val1024_1M                         150               128                 8             100                   4              2.0
+poisson_scale_k10.0_20.0_val1024_1M                          75               128                 2             100                   4              2.0
+poisson_scale_k2.5_5.0_val1024_1M                        750               128               128             100                   4              2.0
+poisson_scale_k2.5_5.0_val1024_1M                         300               128                32             100                   4              2.0
+poisson_scale_k2.5_5.0_val1024_1M                         150               128                 8             100                   4              2.0
+poisson_scale_k2.5_5.0_val1024_1M                          75               128                 2             100                   4              2.0
+
+
+
+
+
+
+poisson_scale_k100.0_200.0_val1024_1M                        750               128               128             41                   16              0.5
+poisson_scale_k100.0_200.0_val1024_1M                         300               128                32             41                   16             0.5
+poisson_scale_k100.0_200.0_val1024_1M                         150               128                 8             41                   16             0.5
+poisson_scale_k100.0_200.0_val1024_1M                          75               128                 2             41                   16             0.5
+poisson_scale_k30.0_50.0_val1024_1M                        750               128               128             41                   16              0.5
+poisson_scale_k30.0_50.0_val1024_1M                         300               128                32             41                   16              0.5
+poisson_scale_k30.0_50.0_val1024_1M                         150               128                 8             41                   16              0.5
+poisson_scale_k30.0_50.0_val1024_1M                          75               128                 2             41                   16              0.5
+
+poisson_scale_k10.0_20.0_val1024_1M                        750               128               128             41                   16              0.5
+poisson_scale_k10.0_20.0_val1024_1M                         300               128                32             41                   16              0.5
+poisson_scale_k10.0_20.0_val1024_1M                         150               128                 8             41                   16              0.5
+poisson_scale_k10.0_20.0_val1024_1M                          75               128                 2             41                   16              0.5
+poisson_scale_k2.5_5.0_val1024_1M                        750               128               128             41                    16              0.5
+poisson_scale_k2.5_5.0_val1024_1M                         300               128                32             41                   16              0.5
+poisson_scale_k2.5_5.0_val1024_1M                         150               128                 8             41                   16              0.5
+poisson_scale_k2.5_5.0_val1024_1M                          75               128                 2             41                   16              0.5
+
+poisson_scale_k100.0_200.0_val1024_1M                        750               128               128             41                   16              5.0
+poisson_scale_k100.0_200.0_val1024_1M                         300               128                32             41                   16             5.0
+poisson_scale_k100.0_200.0_val1024_1M                         150               128                 8             41                   16             5.0
+poisson_scale_k100.0_200.0_val1024_1M                          75               128                 2             41                   16             5.0
+poisson_scale_k30.0_50.0_val1024_1M                        750               128               128             41                   16              5.0
+poisson_scale_k30.0_50.0_val1024_1M                         300               128                32             41                   16              5.0
+poisson_scale_k30.0_50.0_val1024_1M                         150               128                 8             41                   16              5.0
+poisson_scale_k30.0_50.0_val1024_1M                          75               128                 2             41                   16              5.0
+
+poisson_scale_k10.0_20.0_val1024_1M                        750               128               128             41                   16              5.0
+poisson_scale_k10.0_20.0_val1024_1M                         300               128                32             41                   16              5.0
+poisson_scale_k10.0_20.0_val1024_1M                         150               128                 8             41                   16              5.0
+poisson_scale_k10.0_20.0_val1024_1M                          75               128                 2             41                   16              5.0
+poisson_scale_k2.5_5.0_val1024_1M                        750               128               128             41                   16              5.0
+poisson_scale_k2.5_5.0_val1024_1M                         300               128                32             41                   16              5.0
+poisson_scale_k2.5_5.0_val1024_1M                         150               128                 8             41                   16              5.0
+poisson_scale_k2.5_5.0_val1024_1M                          75               128                 2             41                   16              5.0
+
+
+poisson_scale_k100.0_200.0_val1024_1M                        750               128               128             41                   16              0.1
+poisson_scale_k100.0_200.0_val1024_1M                         300               128                32             41                   16             0.1
+poisson_scale_k100.0_200.0_val1024_1M                         150               128                 8             41                   16             0.1
+poisson_scale_k100.0_200.0_val1024_1M                          75               128                 2             41                   16             0.1
+poisson_scale_k30.0_50.0_val1024_1M                        750               128               128             41                   16              0.1
+poisson_scale_k30.0_50.0_val1024_1M                         300               128                32             41                   16              0.1
+poisson_scale_k30.0_50.0_val1024_1M                         150               128                 8             41                   16              0.1
+poisson_scale_k30.0_50.0_val1024_1M                          75               128                 2             41                   16              0.1
+poisson_scale_k10.0_20.0_val1024_1M                        750               128               128             41                   16              0.1
+poisson_scale_k10.0_20.0_val1024_1M                         300               128                32             41                   16              0.1
+poisson_scale_k10.0_20.0_val1024_1M                         150               128                 8             41                   16              0.1
+poisson_scale_k10.0_20.0_val1024_1M                          75               128                 2             41                   16              0.1
+poisson_scale_k2.5_5.0_val1024_1M                        750               128               128             41                    16              0.1
+poisson_scale_k2.5_5.0_val1024_1M                         300               128                32             41                   16              0.1
+poisson_scale_k2.5_5.0_val1024_1M                         150               128                 8             41                   16              0.1
+poisson_scale_k2.5_5.0_val1024_1M                          75               128                 2             41                   16              0.1

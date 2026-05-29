@@ -1,0 +1,48 @@
+\begin{figure*}
+  \begin{tabular}[c]{cccc}
+  \hspace{-5mm}
+    \multirow{2}{*}{
+    \begin{subfigure}{0.30\textwidth}
+        \vspace{-5mm}
+      \includegraphics[width=\textwidth]{figs/loss_landscape/3D_loss_landscape.pdf}
+      \caption{ResNet-18}
+      \label{subfig:3d_loss_resnet18}
+    \end{subfigure}
+} 
+& \begin{subfigure}[c]{0.2\textwidth}
+      \includegraphics[width=\textwidth]{figs/loss_landscape/system_convection/N_f_1000/beta_5/set_0/3D_loss_landscape.pdf}
+      \vspace{-6mm}
+      \caption{1000, $\beta=5$}     \label{subfig:3d_loss_convec_pinn_beta5_n1000}
+    \end{subfigure}&
+    \begin{subfigure}[c]{0.2\textwidth}
+      \includegraphics[width=\textwidth]{figs/loss_landscape/system_convection/N_f_15000/beta_5/set_0/3D_loss_landscape.pdf}
+      \vspace{-6mm}
+      \caption{15000, $\beta=5$} \label{subfig:3d_loss_convec_pinn_beta5_n15000}
+    \end{subfigure}&
+    \begin{subfigure}[c]{0.2\textwidth}
+      \includegraphics[width=\textwidth]{figs/loss_landscape/FNO/poisson_scale_k2.5_5.0_val1024_1M_subsample2.pdf}
+      \vspace{-6mm}
+      \caption{32768, $K=2.0-5.0$}
+      \label{subfig:3d_loss_fno_1m_32k_2.0_5.0}
+    \end{subfigure}\\
+& \begin{subfigure}[c]{0.2\textwidth}
+      \includegraphics[width=\textwidth]{figs/loss_landscape/system_convection/N_f_1000/beta_50/set_0/3D_loss_landscape.pdf}
+      \vspace{-6mm}
+      \caption{1000, $\beta=50$} \label{subfig:3d_loss_convec_pinn_beta50_n1000}
+    \end{subfigure}&
+    \begin{subfigure}[c]{0.2\textwidth}
+      \includegraphics[width=\textwidth]{figs/loss_landscape/system_convection/N_f_15000/beta_50/set_0/3D_loss_landscape.pdf}
+      \vspace{-6mm}
+      \caption{15000, $\beta=50$} \label{subfig:3d_loss_convec_pinn_beta50_n15000}
+    \end{subfigure}&
+    \begin{subfigure}[c]{0.2\textwidth}
+      \includegraphics[width=\textwidth]{figs/loss_landscape/FNO/poisson_scale_k100.0_200.0_val1024_1M_subsample2.pdf}
+      \vspace{-6mm}
+      \caption{32768, $K=100-200$}
+      \label{subfig:3d_loss_fno_1m_32k_100_200}
+    \end{subfigure}\\
+  \end{tabular}    
+  \caption{ Comparison on 3D Loss Landscape. Left: The 3D Loss Landscpae of ResNet-18. Right: 3D Loss Landscpae of PINN and FNO on different training settings. \yaoqing{@Yuanzhe Please add the FNO plots ASAP.}
+  }
+  \label{fig:3d_losslandscape_cv_sciml}
+\end{figure*}
