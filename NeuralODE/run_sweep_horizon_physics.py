@@ -1274,6 +1274,45 @@ def rollout_rel_l2_trajectory(
     _, _, _, l2 = rollout_metrics(inputs, model, dt_t, method="euler")
     return float(l2)
 
+
+def _parse_float_csv(s: str) -> list[float]:
+    s = (s or "").strip()
+    if not s:
+        return []
+    return [float(x.strip()) for x in s.split(",") if x.strip()]
+
+
+def _parse_int_csv(s: str) -> list[int]:
+    s = (s or "").strip()
+    if not s:
+        return []
+    return [int(float(x.strip())) for x in s.split(",") if x.strip()]
+
+
+def _column_indices_for_inv_b_labels(b_values: list[float], requested_inv_b: list[float]) -> list[int]:
+    """Columns whose ``1/b`` axis value matches requested labels (within tolerance)."""
+    inv_present = 1.0 / np.asarray(b_values, dtype=float)
+    cols: list[int] = []
+    seen: set[int] = set()
+    for t in requested_inv_b:
+        tv = float(t)
+        dist = np.abs(inv_present - tv)
+        j = int(np.argmin(dist))
+        tol = max(1e-9, 1e-6 * max(1.0, abs(tv)))
+        if float(dist[j]) > tol:
+            print(
+                f"[plot-inv-b-values] skipping 1/b={tv:g}: nearest in data is "
+                f"{float(inv_present[j]):g} (Δ={float(dist[j]):.3g})",
+                flush=True,
+            )
+            continue
+        if j in seen:
+            continue
+        seen.add(j)
+        cols.append(j)
+    return cols
+
+
 def fmt_tag(val: float) -> str:
     return f"{val:.3f}".rstrip("0").rstrip(".")
 
