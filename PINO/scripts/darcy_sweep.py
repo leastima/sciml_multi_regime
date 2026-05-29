@@ -109,7 +109,7 @@ def main() -> None:
         dest="alm_mu", help="Initial ALM penalty μ₀.")
     parser.add_argument("--alm_rho",            type=float, default=1.05,
         help="ALM μ multiplier each outer.")
-    parser.add_argument("--alm_save_best",      action="store_true", default=True)
+    parser.add_argument("--alm_save_best",      action="store_true")
     parser.add_argument("--alm_adam_lr",        type=float, default=1e-4)
     parser.add_argument("--alm_adam_warmup_frac", type=float, default=0.2)
     parser.add_argument("--alm_adam_no_cosine", action="store_true")

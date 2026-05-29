@@ -23,7 +23,7 @@ N_SAMPLES="${N_SAMPLES:-1000}"
 SEED="${SEED:-0}"
 
 # Adam warm-start steps
-ADAM_STEPS="${ADAM_STEPS:-10000}"
+ADAM_STEPS="${ADAM_STEPS:-15000}"
 CKPT_DIR="${CKPT_DIR:-${OUTDIR}/adam_ckpts}"
 # ─────────────────────────────────────────────────────────────────────────────
 
