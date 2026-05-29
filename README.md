@@ -1,22 +1,34 @@
-# Unveiling Multi-regime Patterns in SciML
-
-**Distinct Failure Modes and Regime-specific Optimization**
+# :mountain: Multi-regime Analysis in Scientific Machine Learning
 
 [![arXiv](https://img.shields.io/badge/arXiv-2605.29153-b31b1b.svg)](https://arxiv.org/abs/2605.29153)
 
-This repository contains the code for the paper:
+> **[ICML 2026] Unveiling Multi-regime Patterns in SciML: Distinct Failure Modes and Regime-specific Optimization**  
+> Yuxin Wang, Yuanzhe Hu, Xiaokun Zhong, Xiaopeng Wang, Haiquan Lu, Tianyu Pang, Michael W. Mahoney, Yujun Yan, [Pu Ren](https://paulpuren.github.io/), [Yaoqing Yang](https://sites.google.com/site/yangyaoqingcmu/)
 
-> **Unveiling Multi-regime Patterns in SciML: Distinct Failure Modes and Regime-specific Optimization**  
-> Yuxin Wang, Yuanzhe Hu, Xiaokun Zhong, Xiaopeng Wang, Haiquan Lu, Tianyu Pang, Michael W. Mahoney, Yujun Yan, Pu Ren, Yaoqing Yang  
-> arXiv 2025. [[PDF]](https://arxiv.org/pdf/2605.29153)
+This repository provides the official implementation of our empirical analysis of widely used scientific machine learning (SciML) models, including:
 
----
+- **5 models**: PINNs, FNOs, NeuralODEs, Physics-informed NOs, Physics-informed NeuralODEs.
+- **7 optimization and training methods**: Adam, L-BFGS, NNCG, Augmented Lagrangian Method, Curriculum Learning, RoPINN, and SGD.
+- **8 physical systems**: convection, reaction, wave, reaction-diffusion, Poisson, Advection-diffusion, Darcy flow, nonlinear Pendulum.
+- **Extensive evaluation metrics**: training loss, test error, 3D loss landscape, Hessian spectrum, etc.
+
 
 ## Overview
 
-Neural networks trained under different hyperparameter settings can fall into distinct training **regimes**, with consistent behavior within regimes and qualitative differences across regimes. This paper studies such multi-regime behavior in scientific machine learning (SciML) through a **regime-aware diagnostic framework** that jointly analyzes performance, training dynamics, and loss-landscape geometry.
+Neural networks trained under different hyperparameter settings can fall into distinct training **regimes**, with consistent behavior within regimes and qualitative differences across regimes. This paper studies such multi-regime behavior in SciML through a **regime-aware diagnostic framework** that jointly analyzes performance, training dynamics, and loss-landscape geometry.
 
-### Three-Regime Structure
+### 🤔 Why is SciML difficult to train?
+
+<p align="center">
+  <img src="assets/loss_landscape_comparison.png" width="900">
+</p>
+
+**Illustrative loss landscapes of representative SciML models versus a standard ResNet.**
+SciML models often exhibit sharp local minima and chaotic ridges, while standard computer vision models typically show the smooth, convex basin.
+
+
+
+### 🗺️ Three-Regime Structure
 
 Across all SciML models studied, a consistent three-regime pattern emerges on the (physical difficulty, data availability) configuration space:
 
@@ -26,13 +38,18 @@ Across all SciML models studied, a consistent three-regime pattern emerges on th
 | **II** | Under-Trained | High | High | Optimization difficulty dominates; model fails to fit training objective |
 | **III** | Over-Trained | Low | High | Data-limited failure; model fits supervision but does not generalize |
 
-### Key Findings
+<p align="center">
+  <img src="assets/regime_patterns_sciml_models.png" width="950">
+</p>
+
+
+### 🔍 Key Findings
 
 1. The three-regime structure appears consistently across PINN, FNO, PINO, NODE, and PINODE.
 2. Optimization effectiveness is **regime-specific**: no single optimizer performs well across all regimes.
 3. SciML models exhibit novel pathological phenomena (e.g., *deceptive sharpness*, *deceptive flatness*) that challenge standard loss-landscape interpretations from computer vision.
 
----
+
 
 ## Repository Structure
 
@@ -50,13 +67,13 @@ sciml_multi_regime/
 
 | Module | Model | Benchmark | Entry Point | Optimizers |
 |--------|-------|-----------|-------------|------------|
-| `PINN/` | PINN | 1D Convection, Reaction, Wave | `PINN/run_experiment.py` | Adam, L-BFGS, ALM, NNCG, CL, RoPINN |
+| `PINN/` | PINN | 1D Convection, Reaction, Wave, Reaction-diffusion | `PINN/run_experiment.py` | L-BFGS, ALM, NNCG, CL, RoPINN |
 | `PINO/` | PINO (FNO2d backbone) | 2D Darcy Flow | `PINO/scripts/darcy_sweep.py` | Adam, L-BFGS, ALM, NNCG, CL |
-| `FNO/` | FNO | 2D Poisson, Helmholtz, AD | `FNO/train.py` | Adam |
+| `FNO/` | FNO | 2D Poisson, Adective-diffusion | `FNO/train.py` | Adam |
 | `NeuralODE/` | NODE / PINODE | Nonlinear Pendulum | `NeuralODE/run_sweep.py` | Adam, L-BFGS, ALM, NNCG, CL |
 | `CNN/` | ResNet-18 | CIFAR-10 | `CNN/run_exp.py` | SGD |
 
----
+
 
 ## Environment Setup
 
@@ -78,7 +95,7 @@ pip install -r NeuralODE/requirements.txt
 pip install -r FNO/requirements.txt
 ```
 
----
+
 
 ## Quickstart
 
@@ -145,7 +162,7 @@ python run_sweep.py \
 
 Supported `--optimizer` values: `Adam`, `LBFGS`, `Adam_NNCG`. CL is enabled via `--cl-warmup`.
 
----
+
 
 ## Running All Optimizers at Once
 
