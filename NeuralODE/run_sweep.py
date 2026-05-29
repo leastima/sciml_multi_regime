@@ -17,7 +17,7 @@ import sys
 # Ensure this directory is on the path so relative imports resolve.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from run_sweep_horizon_physics_cl import main  # noqa: E402
+from run_sweep_horizon_physics import main  # noqa: E402
 
 if __name__ == "__main__":
     main()

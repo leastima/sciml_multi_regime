@@ -41,8 +41,8 @@ for opt in ${OPTIMIZERS}; do
                     --opt "${opt}" \
                     --num_res "${n_res}" \
                     --initial_seed "${seed}" \
-                    --outdir "${OUTDIR}/${opt}" \
-                    --gpu "${GPU}" \
+                    --save_path "${OUTDIR}/${opt}" \
+                    --device "${GPU}" \
                     || echo "WARN: failed opt=${opt} beta=${beta} n_res=${n_res} seed=${seed}"
             done
         done

@@ -52,7 +52,6 @@ from darcy_data import (  # noqa: E402
     resolve_piececonst_paths,
 )
 from darcy_train import train_one  # noqa: E402
-from scripts._cell_shard import cell_shard  # noqa: E402
 
 
 def main() -> None:
@@ -105,7 +104,7 @@ def main() -> None:
     parser.add_argument("--alm_data_eps_slack", type=float, default=0.0)
     parser.add_argument("--alm_cons_item",      type=str,   default="pde",
         choices=("data", "pde"))
-    parser.add_argument("--alm_uncon_weight",   type=float, default=0.000001)
+    parser.add_argument("--alm_uncon_weight",   type=float, default=200.0)
     parser.add_argument("--alm_mu", "--alm_mu0", type=float, default=2.0,
         dest="alm_mu", help="Initial ALM penalty μ₀.")
     parser.add_argument("--alm_rho",            type=float, default=1.2,
@@ -142,8 +141,6 @@ def main() -> None:
         help="Directory with piececonst_r421_N1024_smooth1/2.mat.")
     parser.add_argument("--test_num", type=int, default=None,
         help="Test trajectories (default 500 if piececonst, else 200).")
-    parser.add_argument("--shard_id", type=int, default=-1)
-    parser.add_argument("--n_shards", type=int, default=8)
     parser.add_argument("--force", action="store_true",
         help="Rerun cells even if results.csv already has a matching row.")
 
@@ -245,15 +242,6 @@ def main() -> None:
             )
             continue
 
-        if args.shard_id >= 0 and cell_shard(
-            r, n_samples, seed, args.n_shards,
-            f=f_rhs, tau=tau, alpha=alpha_v, a_low=a_low,
-        ) != args.shard_id:
-            print(
-                f"SKIP shard_id={args.shard_id} (cell assigned to another shard)",
-                flush=True,
-            )
-            continue
 
         print(
             f"\nRun: r={r}  f={f_rhs}  tau={tau} alpha={alpha_v} a_low={a_low}  "

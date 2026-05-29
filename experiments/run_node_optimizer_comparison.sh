@@ -15,12 +15,11 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NODE_DIR="${REPO_ROOT}/NeuralODE"
 OUTDIR="${OUTDIR:-/pscratch/sd/w/wyx345/sciml_multi_regime/experiments/node_fig3}"
 
-GPU="${GPU:-0}"
-SEEDS="${SEEDS:-0 1 2}"
+SEEDS="${SEEDS:-0,1,2}"
 
-# Sweep axes (match paper Table 1)
-INV_B_VALUES="1 2 4 6 8 10 16 32"
-HORIZON_VALUES="2 4 8 10 16 20 30 40"
+# Sweep axes (match paper Table 1) — comma-separated for --inv-b-values / --horizon-values
+INV_B_VALUES="1,2,4,6,8,10,16,32"
+HORIZON_VALUES="2,4,8,10,16,20,30,40"
 
 # Training epochs for each optimizer
 ADAM_EPOCHS=600
@@ -37,50 +36,50 @@ echo "--- optimizer: Adam ---"
 python "${NODE_DIR}/run_sweep.py" \
     --optimizer Adam \
     --physics-mode pinn \
-    --inv-b ${INV_B_VALUES} \
-    --horizon ${HORIZON_VALUES} \
-    --seeds ${SEEDS} \
+    --inv-b-values "${INV_B_VALUES}" \
+    --horizon-values "${HORIZON_VALUES}" \
+    --seeds "${SEEDS}" \
     --epochs "${ADAM_EPOCHS}" \
-    --outdir "${OUTDIR}/adam" \
-    --gpu "${GPU}"
+    --out-dir "${OUTDIR}/adam" \
+    --cuda
 
 # ── L-BFGS ────────────────────────────────────────────────────────────────────
 echo "--- optimizer: L-BFGS ---"
 python "${NODE_DIR}/run_sweep.py" \
     --optimizer LBFGS \
     --physics-mode pinn_alm \
-    --inv-b ${INV_B_VALUES} \
-    --horizon ${HORIZON_VALUES} \
-    --seeds ${SEEDS} \
+    --inv-b-values "${INV_B_VALUES}" \
+    --horizon-values "${HORIZON_VALUES}" \
+    --seeds "${SEEDS}" \
     --epochs "${LBFGS_EPOCHS}" \
     --alm-outer-iters 1 \
-    --outdir "${OUTDIR}/lbfgs" \
-    --gpu "${GPU}"
+    --out-dir "${OUTDIR}/lbfgs" \
+    --cuda
 
 # ── ALM ───────────────────────────────────────────────────────────────────────
 echo "--- optimizer: ALM ---"
 python "${NODE_DIR}/run_sweep.py" \
     --optimizer LBFGS \
     --physics-mode pinn_alm \
-    --inv-b ${INV_B_VALUES} \
-    --horizon ${HORIZON_VALUES} \
-    --seeds ${SEEDS} \
+    --inv-b-values "${INV_B_VALUES}" \
+    --horizon-values "${HORIZON_VALUES}" \
+    --seeds "${SEEDS}" \
     --epochs 1 \
     --alm-outer-iters "${ALM_OUTER}" \
-    --outdir "${OUTDIR}/alm" \
-    --gpu "${GPU}"
+    --out-dir "${OUTDIR}/alm" \
+    --cuda
 
 # ── NNCG (post-Adam fine-tuning) ──────────────────────────────────────────────
 echo "--- optimizer: NNCG ---"
 python "${NODE_DIR}/run_sweep.py" \
     --optimizer Adam_NNCG \
     --physics-mode pinn \
-    --inv-b ${INV_B_VALUES} \
-    --horizon ${HORIZON_VALUES} \
-    --seeds ${SEEDS} \
+    --inv-b-values "${INV_B_VALUES}" \
+    --horizon-values "${HORIZON_VALUES}" \
+    --seeds "${SEEDS}" \
     --epochs "${ADAM_EPOCHS}" \
-    --outdir "${OUTDIR}/nncg" \
-    --gpu "${GPU}"
+    --out-dir "${OUTDIR}/nncg" \
+    --cuda
 
 # ── CL (curriculum on damping b) ─────────────────────────────────────────────
 echo "--- optimizer: CL ---"
@@ -88,12 +87,12 @@ python "${NODE_DIR}/run_sweep.py" \
     --optimizer Adam \
     --physics-mode pinn \
     --cl-warmup \
-    --inv-b ${INV_B_VALUES} \
-    --horizon ${HORIZON_VALUES} \
-    --seeds ${SEEDS} \
+    --inv-b-values "${INV_B_VALUES}" \
+    --horizon-values "${HORIZON_VALUES}" \
+    --seeds "${SEEDS}" \
     --epochs "${ADAM_EPOCHS}" \
-    --outdir "${OUTDIR}/cl" \
-    --gpu "${GPU}"
+    --out-dir "${OUTDIR}/cl" \
+    --cuda
 
 echo ""
 echo "=== Done. Results in ${OUTDIR} ==="

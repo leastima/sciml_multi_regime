@@ -465,11 +465,17 @@ class DarcyFlow(Dataset):
                  offset=0,
                  num=1):
         self.S = int(nx // sub) + 1 if sub > 1 else nx
-        data = scipy.io.loadmat(datapath)
-        a = data['coeff']
-        u = data['sol']
-        self.a = torch.tensor(a[offset: offset + num, ::sub, ::sub], dtype=torch.float)
-        self.u = torch.tensor(u[offset: offset + num, ::sub, ::sub], dtype=torch.float)
+        if str(datapath).endswith('.h5') or str(datapath).endswith('.hdf5'):
+            import h5py
+            with h5py.File(datapath, 'r') as hf:
+                a = hf['coeff'][offset: offset + num, ::sub, ::sub]
+                u = hf['sol'][offset: offset + num, ::sub, ::sub]
+        else:
+            data = scipy.io.loadmat(datapath)
+            a = data['coeff'][offset: offset + num, ::sub, ::sub]
+            u = data['sol'][offset: offset + num, ::sub, ::sub]
+        self.a = torch.tensor(a, dtype=torch.float)
+        self.u = torch.tensor(u, dtype=torch.float)
         self.mesh = torch2dgrid(self.S, self.S)
 
     def __len__(self):
