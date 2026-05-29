@@ -2895,7 +2895,6 @@ def main():
         "--horizon-values",
         type=str,
         default="0.5,1,2,5,8,10,12,15,20",
-        # default="0.5",
         help=(
             "Comma-separated training horizons t_max. If empty, uses linspace 1..20 (12 points). "
             "Default matches the 8×8 LBFGS/ALM sweep grid."
@@ -2960,7 +2959,6 @@ def main():
         "--inv-b-values",
         type=str,
         default="1,2,4,6,8,10,12,15",
-        # default="10",
         help=(
             "Comma-separated 1/b grid points (sets b=1/inv for each). Overrides --b-values when non-empty. "
             "Default matches the 8×8 LBFGS/ALM sweep grid."
