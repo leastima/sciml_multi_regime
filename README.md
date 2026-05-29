@@ -144,16 +144,12 @@ python run_sweep_horizon_physics_cl.py \
 
 ---
 
-## Reproducing Paper Figures
+## Examples
 
-The `experiments/` directory contains shell scripts that reproduce the main regime-map comparisons from the paper (Figure 3):
-
-```bash
 cd experiments
-bash run_pinn_optimizer_comparison.sh   # Figure 3(a–e): PINN, 1D convection
-bash run_pino_optimizer_comparison.sh   # Figure 3(f–j): PINO, 2D Darcy flow
-bash run_node_optimizer_comparison.sh   # Figure 3(k–o): PINODE, nonlinear pendulum
-```
+bash run_pinn_optimizer_comparison.sh   
+bash run_pino_optimizer_comparison.sh   
+bash run_node_optimizer_comparison.sh   
 
 ---
 
