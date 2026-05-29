@@ -100,7 +100,7 @@ def main() -> None:
         help="0=auto: ceil(n/500) chunks.")
     parser.add_argument("--alm_inner_step",     type=int,   default=500,
         help="Adam inner steps per outer when --alm_inner adam.")
-    parser.add_argument("--alm_pde_eps_slack",  type=float, default=0.0)
+    parser.add_argument("--alm_pde_eps_slack",  type=float, default=0.05)
     parser.add_argument("--alm_data_eps_slack", type=float, default=0.0)
     parser.add_argument("--alm_cons_item",      type=str,   default="pde",
         choices=("data", "pde"))
@@ -109,8 +109,8 @@ def main() -> None:
         dest="alm_mu", help="Initial ALM penalty μ₀.")
     parser.add_argument("--alm_rho",            type=float, default=1.05,
         help="ALM μ multiplier each outer.")
-    parser.add_argument("--alm_save_best",      action="store_true")
-    parser.add_argument("--alm_adam_lr",        type=float, default=None)
+    parser.add_argument("--alm_save_best",      action="store_true", default=True)
+    parser.add_argument("--alm_adam_lr",        type=float, default=1e-4)
     parser.add_argument("--alm_adam_warmup_frac", type=float, default=0.2)
     parser.add_argument("--alm_adam_no_cosine", action="store_true")
 
@@ -121,7 +121,7 @@ def main() -> None:
     parser.add_argument("--cl_inner_step", type=int, default=500)
 
     # ── NNCG parameters ──────────────────────────────────────────────────────
-    parser.add_argument("--nncg_steps", type=int, default=5)
+    parser.add_argument("--nncg_steps", type=int, default=100)
 
     # ── I/O paths ────────────────────────────────────────────────────────────
     parser.add_argument("--gpu",  type=int, default=0)

@@ -1,75 +1,88 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Reproduce Figure 3(f–j): PINO optimizer comparison on 2D Darcy flow
+# PINO optimizer comparison — single experiment (2D Darcy flow)
 #
-# Sweeps r (contrast ratio / physical difficulty) vs n_samples (training data)
-# for 5 optimizer settings: Adam, L-BFGS, ALM, NNCG, CL.
+# Runs one (r, n_samples, seed) cell through all 5 optimizers:
+#   Adam → L-BFGS → ALM → NNCG → CL
 #
-# Paper setup (Table 1): PINO, 2D Darcy flow, 3 seeds,
-# r in {4,6,8,10}, n_samples in {250,500,750,1000}.
+# All post-training optimizers warm-start from the same Adam checkpoint.
+# Edit the variables below to change the experimental setting.
 # =============================================================================
 set -euo pipefail
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PINO_DIR="${REPO_ROOT}/PINO"
-OUTDIR="${OUTDIR:-/pscratch/sd/w/wyx345/sciml_multi_regime/experiments/pino_fig3}"
+OUTDIR="${OUTDIR:-/pscratch/sd/w/wyx345/sciml_multi_regime/experiments/pino_single}"
 
 GPU="${GPU:-0}"
-SEEDS="${SEEDS:-0 1 2}"
 
-# Sweep axes
-R_VALUES="4 6 8 10"
-N_SAMPLES_VALUES="250 500 750 1000"
+# Single experimental setting
+R="${R:-10}"
+N_SAMPLES="${N_SAMPLES:-1000}"
+SEED="${SEED:-0}"
 
-# Adam warm-start steps and per-optimizer post-training steps
-ADAM_STEPS=10000
-
-# Adam ckpt dir (set via PINO_CKPT_DIR or override here)
-CKPT_DIR="${PINO_CKPT_DIR:-${OUTDIR}/adam_ckpts}"
+# Adam warm-start steps
+ADAM_STEPS="${ADAM_STEPS:-10000}"
+CKPT_DIR="${CKPT_DIR:-${OUTDIR}/adam_ckpts}"
 # ─────────────────────────────────────────────────────────────────────────────
 
 echo "=== PINO optimizer comparison ==="
-echo "Output: ${OUTDIR}"
+echo "Setting: r=${R}  n_samples=${N_SAMPLES}  seed=${SEED}"
+echo "Output:  ${OUTDIR}"
 mkdir -p "${OUTDIR}" "${CKPT_DIR}"
 
-# ── Step 1: Adam warm-start (shared across all post-training optimizers) ──────
-echo ""
-echo "--- Step 1: Adam warm-start (${ADAM_STEPS} steps) ---"
-for r in ${R_VALUES}; do
-    for n in ${N_SAMPLES_VALUES}; do
-        for seed in ${SEEDS}; do
-            python "${PINO_DIR}/scripts/darcy_sweep.py" \
-                --optimizer adam \
-                --r "${r}" --n_samples "${n}" --seed "${seed}" \
-                --steps "${ADAM_STEPS}" \
-                --ckpt_dir "${CKPT_DIR}" \
-                --outdir "${OUTDIR}/adam" \
-                --gpu "${GPU}" \
-                || echo "WARN: adam failed r=${r} n=${n} seed=${seed}"
-        done
-    done
-done
+COMMON="--r ${R} --n_samples ${N_SAMPLES} --seed ${SEED} --gpu ${GPU}"
 
-# ── Step 2: Post-training optimizers (warm-start from Adam ckpts) ─────────────
-for opt in lbfgs alm nncg cl; do
-    echo ""
-    echo "--- optimizer: ${opt} ---"
-    for r in ${R_VALUES}; do
-        for n in ${N_SAMPLES_VALUES}; do
-            for seed in ${SEEDS}; do
-                python "${PINO_DIR}/scripts/darcy_sweep.py" \
-                    --optimizer "${opt}" \
-                    --r "${r}" --n_samples "${n}" --seed "${seed}" \
-                    --steps 1 \
-                    --ckpt_dir "${CKPT_DIR}" \
-                    --outdir "${OUTDIR}/${opt}" \
-                    --gpu "${GPU}" \
-                    || echo "WARN: ${opt} failed r=${r} n=${n} seed=${seed}"
-            done
-        done
-    done
-done
+# ── Adam warm-start ───────────────────────────────────────────────────────────
+echo ""
+echo "--- Adam (${ADAM_STEPS} steps) ---"
+python "${PINO_DIR}/scripts/darcy_sweep.py" \
+    --optimizer adam \
+    --steps "${ADAM_STEPS}" \
+    --ckpt_dir "${CKPT_DIR}" \
+    --outdir "${OUTDIR}/adam" \
+    ${COMMON}
+
+# ── L-BFGS ────────────────────────────────────────────────────────────────────
+echo ""
+echo "--- L-BFGS ---"
+python "${PINO_DIR}/scripts/darcy_sweep.py" \
+    --optimizer lbfgs \
+    --steps 1 \
+    --ckpt_dir "${CKPT_DIR}" \
+    --outdir "${OUTDIR}/lbfgs" \
+    ${COMMON}
+
+# ── ALM ───────────────────────────────────────────────────────────────────────
+echo ""
+echo "--- ALM (mu=${ALM_MU:-2} rho=${ALM_RHO:-1.05} outer=${ALM_OUTER:-50} inner=${ALM_INNER:-500}) ---"
+python "${PINO_DIR}/scripts/darcy_sweep.py" \
+    --optimizer alm \
+    --steps 1 \
+    --ckpt_dir "${CKPT_DIR}" \
+    --outdir "${OUTDIR}/alm" \
+    ${COMMON}
+
+# ── NNCG ──────────────────────────────────────────────────────────────────────
+echo ""
+echo "--- NNCG ---"
+python "${PINO_DIR}/scripts/darcy_sweep.py" \
+    --optimizer nncg \
+    --steps 1 \
+    --ckpt_dir "${CKPT_DIR}" \
+    --outdir "${OUTDIR}/nncg" \
+    ${COMMON}
+
+# ── CL ────────────────────────────────────────────────────────────────────────
+echo ""
+echo "--- CL ---"
+python "${PINO_DIR}/scripts/darcy_sweep.py" \
+    --optimizer cl \
+    --steps 1 \
+    --ckpt_dir "${CKPT_DIR}" \
+    --outdir "${OUTDIR}/cl" \
+    ${COMMON}
 
 echo ""
 echo "=== Done. Results in ${OUTDIR} ==="

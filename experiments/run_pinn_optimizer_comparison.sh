@@ -1,52 +1,42 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Reproduce Figure 3(a–e): PINN optimizer comparison on 1D Convection
+# PINN optimizer comparison — single experiment (1D Convection)
 #
-# Sweeps beta (physical difficulty) vs n_res (collocation points) for 5 optimizer
-# settings: RoPINN, L-BFGS, ALM, NNCG, CL.
+# Runs one (beta, n_res, seed) setting through all 5 optimizers:
+#   RoPINN, L-BFGS, ALM, NNCG, CL
 #
-# Paper setup (Table 1): PINN, 1D convection, 5 seeds, beta in {1,5,10,20,40},
-# n_res in {1000,2000,5000,10000}.
+# Edit the variables below to change the experimental setting.
 # =============================================================================
 set -euo pipefail
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PINN_DIR="${REPO_ROOT}/PINN"
-OUTDIR="${OUTDIR:-/pscratch/sd/w/wyx345/sciml_multi_regime/experiments/pinn_fig3}"
+OUTDIR="${OUTDIR:-/pscratch/sd/w/wyx345/sciml_multi_regime/experiments/pinn_single}"
 
 GPU="${GPU:-0}"
-SEEDS="${SEEDS:-0 1 2 3 4}"
 
-# Sweep axes (match paper)
-BETA_VALUES="1 5 10 20 40"
-N_RES_VALUES="1000 2000 5000 10000"
-
-# Optimizers to compare (Figure 3 columns a–e)
-OPTIMIZERS="ropinn lbfgs alm nncg cl"
+# Single experimental setting
+BETA="${BETA:-10}"          # convection coefficient (physical difficulty)
+N_RES="${N_RES:-5000}"      # number of collocation points
+SEED="${SEED:-0}"
 # ─────────────────────────────────────────────────────────────────────────────
 
 echo "=== PINN optimizer comparison ==="
-echo "Output: ${OUTDIR}"
+echo "Setting: beta=${BETA}  n_res=${N_RES}  seed=${SEED}"
+echo "Output:  ${OUTDIR}"
 mkdir -p "${OUTDIR}"
 
-for opt in ${OPTIMIZERS}; do
+COMMON="--pde convection --pde_params '{\"beta\":${BETA}}' --num_res ${N_RES} --initial_seed ${SEED} --device ${GPU}"
+
+for opt in ropinn lbfgs alm nncg cl; do
+    echo ""
     echo "--- optimizer: ${opt} ---"
-    for beta in ${BETA_VALUES}; do
-        for n_res in ${N_RES_VALUES}; do
-            for seed in ${SEEDS}; do
-                python "${PINN_DIR}/run_experiment.py" \
-                    --pde convection \
-                    --pde_params "{\"beta\":${beta}}" \
-                    --opt "${opt}" \
-                    --num_res "${n_res}" \
-                    --initial_seed "${seed}" \
-                    --save_path "${OUTDIR}/${opt}" \
-                    --device "${GPU}" \
-                    || echo "WARN: failed opt=${opt} beta=${beta} n_res=${n_res} seed=${seed}"
-            done
-        done
-    done
+    python "${PINN_DIR}/run_experiment.py" \
+        --opt "${opt}" \
+        --save_path "${OUTDIR}/${opt}" \
+        ${COMMON}
 done
 
+echo ""
 echo "=== Done. Results in ${OUTDIR} ==="
