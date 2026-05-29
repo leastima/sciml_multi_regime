@@ -65,9 +65,11 @@ python "${PINO_DIR}/scripts/darcy_sweep.py" \
     ${COMMON}
 
 # ── NNCG ──────────────────────────────────────────────────────────────────────
+# Note: NNCG uses create_graph=True for HVPs which is memory-intensive.
+# Set NNCG_FB_CHUNK=8 (or higher) to enable chunked HVP and reduce peak memory.
 echo ""
 echo "--- NNCG ---"
-python "${PINO_DIR}/scripts/darcy_sweep.py" \
+NNCG_FB_CHUNK="${NNCG_FB_CHUNK:-8}" python "${PINO_DIR}/scripts/darcy_sweep.py" \
     --optimizer nncg \
     --steps 1 \
     --ckpt_dir "${CKPT_DIR}" \

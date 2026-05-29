@@ -27,9 +27,9 @@ echo "Setting: beta=${BETA}  n_res=${N_RES}  seed=${SEED}"
 echo "Output:  ${OUTDIR}"
 mkdir -p "${OUTDIR}"
 
-COMMON="--pde convection --pde_params '{\"beta\":${BETA}}' --num_res ${N_RES} --initial_seed ${SEED} --device ${GPU}"
+COMMON="--pde convection --pde_params '{\"beta\":${BETA}}' --num_res ${N_RES} --initial_seed ${SEED} --device ${GPU} --new_data"
 
-for opt in ropinn lbfgs alm nncg cl; do
+for opt in lbfgs alm nncg cl adam_lbfgs; do
     echo ""
     echo "--- optimizer: ${opt} ---"
     python "${PINN_DIR}/run_experiment.py" \
