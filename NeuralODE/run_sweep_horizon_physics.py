@@ -12,6 +12,7 @@ import numpy as np
 import torch
 import torchdiffeq
 from scipy.integrate import solve_ivp
+from nys_newton_cg import NysNewtonCG
 
 
 def set_seed(seed: int = 0) -> None:
@@ -2708,7 +2709,7 @@ def main():
     parser.add_argument(
         "--alm-uncon-weight",
         type=float,
-        default=1.0,
+        default=10.0,
         help=(
             "For physics_mode='pinn_alm': scalar multiplier on the unconstrained objective "
             "(L_data for target=physics, L_physics for target=data). "
@@ -2736,7 +2737,7 @@ def main():
     parser.add_argument(
         "--alm-warmup-epochs",
         type=int,
-        default=0,
+        default=500,
         help=(
             "For physics_mode='pinn_alm': pinn+penalty warmup before ALM. "
             "Adam: epochs over the train loader. LBFGS: full-batch LBFGS steps (--lbfgs-max-iter each). "
