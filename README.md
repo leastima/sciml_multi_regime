@@ -38,9 +38,9 @@ Across all SciML models studied, a consistent three-regime pattern emerges on th
 
 ```
 sciml_multi_regime/
-  PINN/           Physics-Informed Neural Networks (1D convection / reaction / wave)
+  PINN/           Physics-Informed Neural Networks (1D convection / reaction / wave / reaction-diffusion)
   PINO/           Physics-Informed Neural Operators (2D Darcy flow)
-  FNO/            Fourier Neural Operators (2D Poisson / Helmholtz / AD)
+  FNO/            Fourier Neural Operators (2D Poisson / AD)
   NeuralODE/      Neural ODEs / Physics-Informed NODEs (nonlinear pendulum)
   CNN/            CNN baseline (ResNet-18, CIFAR-10)
   experiments/    Single-run experiment scripts for each module
@@ -181,11 +181,13 @@ INV_B=4 HORIZON=40 bash experiments/run_node_optimizer_comparison.sh
 ## Citation
 
 ```bibtex
-@article{wang2025sciml,
-  title   = {Unveiling Multi-regime Patterns in SciML: Distinct Failure Modes and Regime-specific Optimization},
-  author  = {Wang, Yuxin and Hu, Yuanzhe and Zhong, Xiaokun and Wang, Xiaopeng and Lu, Haiquan
-             and Pang, Tianyu and Mahoney, Michael W. and Yan, Yujun and Ren, Pu and Yang, Yaoqing},
-  journal = {arXiv preprint arXiv:2605.29153},
-  year    = {2025}
+@misc{wang2026unveilingmultiregimepatternssciml,
+      title={Unveiling Multi-regime Patterns in SciML: Distinct Failure Modes and Regime-specific Optimization}, 
+      author={Yuxin Wang and Yuanzhe Hu and Xiaokun Zhong and Xiaopeng Wang and Haiquan Lu and Tianyu Pang and Michael W. Mahoney and Yujun Yan and Pu Ren and Yaoqing Yang},
+      year={2026},
+      eprint={2605.29153},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2605.29153}, 
 }
 ```
