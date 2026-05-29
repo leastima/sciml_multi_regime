@@ -92,13 +92,13 @@ def main() -> None:
         help="PDE-loss weight in `xy_loss*data + f_loss*pde`.")
 
     # ── ALM parameters ───────────────────────────────────────────────────────
-    parser.add_argument("--alm_outer_iters",    type=int,   default=100)
+    parser.add_argument("--alm_outer_iters",    type=int,   default=50)
     parser.add_argument("--alm_inner",          type=str,   default="adam",
         choices=("lbfgs", "adam"))
     parser.add_argument("--alm_lbfgs_max_iter", type=int,   default=200)
     parser.add_argument("--alm_lbfgs_chunks",   type=int,   default=0,
         help="0=auto: ceil(n/500) chunks.")
-    parser.add_argument("--alm_inner_step",     type=int,   default=4000,
+    parser.add_argument("--alm_inner_step",     type=int,   default=500,
         help="Adam inner steps per outer when --alm_inner adam.")
     parser.add_argument("--alm_pde_eps_slack",  type=float, default=0.0)
     parser.add_argument("--alm_data_eps_slack", type=float, default=0.0)
@@ -107,7 +107,7 @@ def main() -> None:
     parser.add_argument("--alm_uncon_weight",   type=float, default=200.0)
     parser.add_argument("--alm_mu", "--alm_mu0", type=float, default=2.0,
         dest="alm_mu", help="Initial ALM penalty μ₀.")
-    parser.add_argument("--alm_rho",            type=float, default=1.2,
+    parser.add_argument("--alm_rho",            type=float, default=1.05,
         help="ALM μ multiplier each outer.")
     parser.add_argument("--alm_save_best",      action="store_true")
     parser.add_argument("--alm_adam_lr",        type=float, default=None)
