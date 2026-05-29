@@ -38,118 +38,143 @@ Across all SciML models studied, a consistent three-regime pattern emerges on th
 
 ```
 sciml_multi_regime/
-  PINN/           Physics-Informed Neural Networks
-  PINO/           Physics-Informed Neural Operators (Darcy flow)
-  FNO/            Fourier Neural Operators
-  NeuralODE/      Neural ODEs / Physics-Informed NODEs
-  CNN/            CNN baseline (ResNet-18, for landscape comparison)
-  experiments/    Cross-module comparison scripts (Figure 3 reproducibility)
-  sh/             Shared SLURM/batch submission helpers
+  PINN/           Physics-Informed Neural Networks (1D convection / reaction / wave)
+  PINO/           Physics-Informed Neural Operators (2D Darcy flow)
+  FNO/            Fourier Neural Operators (2D Poisson / Helmholtz / AD)
+  NeuralODE/      Neural ODEs / Physics-Informed NODEs (nonlinear pendulum)
+  CNN/            CNN baseline (ResNet-18, CIFAR-10)
+  experiments/    Single-run experiment scripts for each module
 ```
 
 ### Module Map
 
-| Module | Model | Benchmark PDE | Optimizers |
-|--------|-------|---------------|------------|
-| `PINN/multiadam` | PINN | 1D Convection, Reaction, Wave, Reaction-Diffusion | Adam, L-BFGS, NNCG, ALM, CL, RoPINN |
-| `PINN/RoPINN` | PINN | 1D Wave, Reaction, Convection | RoPINN |
-| `PINO/` | PINO (FNO2d backbone) | 2D Darcy Flow | Adam, L-BFGS, NNCG, ALM, CL |
-| `FNO/` | FNO | 2D Poisson, Advection-Diffusion, Helmholtz | Adam |
-| `NeuralODE/` | NODE / PINODE | Nonlinear Pendulum | Adam, L-BFGS, ALM, NNCG, CL |
-| `CNN/` | ResNet-18 | Image classification (CIFAR) | SGD (comparison baseline) |
+| Module | Model | Benchmark | Entry Point | Optimizers |
+|--------|-------|-----------|-------------|------------|
+| `PINN/` | PINN | 1D Convection, Reaction, Wave | `PINN/run_experiment.py` | Adam, L-BFGS, ALM, NNCG, CL, RoPINN |
+| `PINO/` | PINO (FNO2d backbone) | 2D Darcy Flow | `PINO/scripts/darcy_sweep.py` | Adam, L-BFGS, ALM, NNCG, CL |
+| `FNO/` | FNO | 2D Poisson, Helmholtz, AD | `FNO/train.py` | Adam |
+| `NeuralODE/` | NODE / PINODE | Nonlinear Pendulum | `NeuralODE/run_sweep.py` | Adam, L-BFGS, ALM, NNCG, CL |
+| `CNN/` | ResNet-18 | CIFAR-10 | `CNN/run_exp.py` | SGD |
 
 ---
 
 ## Environment Setup
 
-This repository uses separate environments for different modules due to distinct dependency requirements.
-
-### Common dependencies (all modules)
+All experiments were run on NERSC Perlmutter (A100 GPUs) using a shared conda environment.
 
 ```bash
-pip install torch>=2.0 numpy scipy matplotlib tqdm wandb
+# Create environment (example using conda)
+conda create -n sciml python=3.11
+conda activate sciml
+
+# Core dependencies
+pip install torch torchvision numpy scipy matplotlib tqdm wandb h5py
+pip install torchdiffeq          # NeuralODE
+pip install ruamel.yaml          # FNO config parsing
+
+# Module-specific extras
+pip install -r PINN/requirements.txt
+pip install -r NeuralODE/requirements.txt
+pip install -r FNO/requirements.txt
 ```
-
-### PINN
-
-```bash
-cd PINN
-pip install -r requirements.txt
-# For RoPINN sub-module:
-pip install -r RoPINN/requirements.txt
-```
-
-### PINO
-
-```bash
-cd PINO
-# Core dependencies are shared with the common stack.
-# No extra requirements.txt needed beyond torch, numpy, scipy, matplotlib.
-```
-
-### FNO
-
-```bash
-cd FNO
-pip install -r requirements.txt   # torch, numpy, scipy, h5py, wandb, ruamel.yaml
-```
-
-### NeuralODE
-
-```bash
-pip install torchdiffeq
-```
-
-> **Note**: All experiments were run on NERSC Perlmutter (A100 GPUs). Module-specific SLURM scripts are in each module's `sh/` or `scripts/` subdirectory.
 
 ---
 
 ## Quickstart
 
-### PINN — 1D Convection sweep (Adam → L-BFGS)
+### PINN — 1D Convection, single run
 
 ```bash
 cd PINN
-python run_experiment.py --pde convection --optimizer lbfgs --beta 1 5 10 20 40
+python run_experiment.py \
+    --pde convection \
+    --pde_params '{"beta":10}' \
+    --opt lbfgs \
+    --num_res 5000 \
+    --initial_seed 0 \
+    --save_path /path/to/output \
+    --new_data
 ```
 
-### PINO — 2D Darcy Flow, single run (r=10, N=1000, Adam → L-BFGS → NNCG)
+Supported `--opt` values: `adam`, `lbfgs`, `alm`, `nncg`, `cl`, `adam_lbfgs`.
+
+### PINO — 2D Darcy flow, single run
 
 ```bash
 cd PINO
-# Generate data (if not using piececonst benchmark mats):
+
+# (Optional) generate data:
 python scripts/generate_darcy.py --r 10 --n_samples 1200 --seed 0
 
-# Adam warm-start + L-BFGS + NNCG chained:
-bash scripts/run_r10_n1000.sh
-```
-
-Or to run a single optimizer interactively:
-
-```bash
-cd PINO
+# Adam warm-start:
 python scripts/darcy_sweep.py \
-    --r 10 --n_samples 1000 --seeds 0 --gpu 0 \
-    --optimizer adam --steps 10000 \
-    --outdir /path/to/output
+    --optimizer adam --steps 15000 \
+    --r 10 --n_samples 1000 --seed 0 --gpu 0 \
+    --ckpt_dir /path/to/ckpts \
+    --outdir /path/to/output/adam
+
+# ALM fine-tuning from the Adam checkpoint:
+python scripts/darcy_sweep.py \
+    --optimizer alm --steps 1 \
+    --r 10 --n_samples 1000 --seed 0 --gpu 0 \
+    --ckpt_dir /path/to/ckpts \
+    --outdir /path/to/output/alm
 ```
 
-### NeuralODE — Nonlinear Pendulum sweep
+Supported `--optimizer` values: `adam`, `lbfgs`, `alm`, `nncg`, `cl`.
+
+### NeuralODE — Nonlinear Pendulum, single run
 
 ```bash
 cd NeuralODE
-python run_sweep_horizon_physics_cl.py \
-    --optimizer lbfgs --horizon 2 4 8 16 --n_train 100 500 1000
+
+# Adam baseline:
+python run_sweep.py \
+    --optimizer Adam --physics-mode pinn \
+    --inv-b-values 8 --horizon-values 20 --seeds 0 \
+    --epochs 600 --cuda \
+    --out-dir /path/to/output/adam
+
+# ALM (LBFGS inner, 500-step warmup):
+python run_sweep.py \
+    --optimizer LBFGS --physics-mode pinn_alm \
+    --inv-b-values 8 --horizon-values 20 --seeds 0 \
+    --alm-outer-iters 50 --alm-warmup-epochs 500 --cuda \
+    --out-dir /path/to/output/alm
 ```
+
+Supported `--optimizer` values: `Adam`, `LBFGS`, `Adam_NNCG`. CL is enabled via `--cl-warmup`.
 
 ---
 
-## Examples
+## Running All Optimizers at Once
 
-cd experiments
-bash run_pinn_optimizer_comparison.sh   
-bash run_pino_optimizer_comparison.sh   
-bash run_node_optimizer_comparison.sh   
+The `experiments/` directory contains ready-to-run single-experiment scripts for each module. Each script accepts environment variables to override the default setting.
+
+```bash
+# PINN (1D Convection, default: beta=10, n_res=5000, seed=0)
+bash experiments/run_pinn_optimizer_comparison.sh
+
+# PINO (2D Darcy, default: r=10, n_samples=1000, seed=0)
+bash experiments/run_pino_optimizer_comparison.sh
+
+# PINODE (Pendulum, default: 1/b=8, horizon=20, seed=0)
+bash experiments/run_node_optimizer_comparison.sh
+
+# FNO (2D Poisson, default config)
+bash experiments/run_fno_training.sh
+
+# CNN (ResNet-18 on CIFAR-10)
+bash experiments/run_cnn_training.sh
+```
+
+Override any setting via environment variables, e.g.:
+
+```bash
+R=5 N_SAMPLES=500 SEED=1 GPU=2 bash experiments/run_pino_optimizer_comparison.sh
+BETA=30 N_RES=10000 bash experiments/run_pinn_optimizer_comparison.sh
+INV_B=4 HORIZON=40 bash experiments/run_node_optimizer_comparison.sh
+```
 
 ---
 
