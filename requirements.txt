@@ -1,0 +1,12 @@
+# Common dependencies shared across all modules.
+# Install with: pip install -r requirements.txt
+#
+# Each module may have its own requirements.txt for extra dependencies.
+# See PINO/requirements.txt and NeuralODE/requirements.txt.
+
+torch>=2.0
+numpy
+scipy
+matplotlib
+tqdm
+wandb

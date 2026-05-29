@@ -1,0 +1,11 @@
+# PINO module dependencies.
+# Common dependencies (torch, numpy, scipy, matplotlib, tqdm, wandb) are in
+# the root requirements.txt.  Install that first:
+#   pip install -r ../requirements.txt
+#   pip install -r requirements.txt
+
+# PINO uses only standard scientific Python; no extra packages beyond root.
+# The NysNewtonCG optimizer (scripts/nys_newton_cg*.py) is self-contained.
+# scipy.io is used for .mat file I/O (already covered by scipy in root).
+ruamel.yaml
+einops
