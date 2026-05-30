@@ -2,7 +2,7 @@
 """
 NeuralODE sweep — entry point.
 
-Delegates to the full implementation in ``run_sweep_horizon_physics_cl.py``.
+Delegates to the full implementation in ``run_sweep_horizon_physics.py``.
 See README.md for usage examples and argument documentation.
 
 Usage:
