@@ -65,13 +65,13 @@ sciml_multi_regime/
 
 ### Module Map
 
-| Module | Model | Benchmark | Entry Point | Optimizers |
-|--------|-------|-----------|-------------|------------|
-| `PINN/` | PINN | 1D Convection, Reaction, Wave, Reaction-diffusion | `PINN/run_experiment.py` | L-BFGS, ALM, NNCG, CL, RoPINN |
-| `PINO/` | PINO (FNO2d backbone) | 2D Darcy Flow | `PINO/scripts/darcy_sweep.py` | Adam, L-BFGS, ALM, NNCG, CL |
-| `FNO/` | FNO | 2D Poisson, Adective-diffusion | `FNO/train.py` | Adam |
-| `NeuralODE/` | NODE / PINODE | Nonlinear Pendulum | `NeuralODE/run_sweep.py` | Adam, L-BFGS, ALM, NNCG, CL |
-| `CNN/` | ResNet-18 | CIFAR-10 | `CNN/run_exp.py` | SGD |
+| Module | Model | Benchmark | Entry Point | Optimizers | Based on |
+|--------|-------|-----------|-------------|------------|----------|
+| `PINN/` | PINN | 1D Convection, Reaction, Wave, Reaction-diffusion | `PINN/run_experiment.py` | Adam, L-BFGS, ALM, NNCG, CL, RoPINN | [PINNacle](https://github.com/i207M/PINNacle), [RoPINN](https://github.com/thuml/RoPINN) |
+| `PINO/` | PINO (FNO2d backbone) | 2D Darcy Flow | `PINO/scripts/darcy_sweep.py` | Adam, L-BFGS, ALM, NNCG, CL | [neuraloperator](https://github.com/neuraloperator/neuraloperator) |
+| `FNO/` | FNO | 2D Poisson, Advection-Diffusion | `FNO/train.py` | Adam | [neuraloperator](https://github.com/neuraloperator/neuraloperator) |
+| `NeuralODE/` | NODE / PINODE | Nonlinear Pendulum | `NeuralODE/run_sweep.py` | Adam, L-BFGS, ALM, NNCG, CL | [torchdiffeq](https://github.com/rtqichen/torchdiffeq) |
+| `CNN/` | ResNet-18 | CIFAR-10 | `CNN/run_exp.py` | SGD | [PyHessian](https://github.com/amirgholami/PyHessian), [loss-landscape](https://github.com/tomgoldstein/loss-landscape) |
 
 
 
@@ -155,19 +155,19 @@ cd PINO
 # (Optional) generate data:
 python scripts/generate_darcy.py --r 10 --n_samples 1200 --seed 0
 
-# Adam warm-start:
+# Adam warm-start (15 000 steps, saves checkpoint):
 python scripts/darcy_sweep.py \
     --optimizer adam --steps 15000 \
     --r 10 --n_samples 1000 --seed 0 --gpu 0 \
     --ckpt_dir /path/to/ckpts \
     --outdir /path/to/output/adam
 
-# ALM fine-tuning from the Adam checkpoint:
+# L-BFGS fine-tuning from the Adam checkpoint:
 python scripts/darcy_sweep.py \
-    --optimizer alm --steps 1 \
+    --optimizer lbfgs --steps 1 \
     --r 10 --n_samples 1000 --seed 0 --gpu 0 \
     --ckpt_dir /path/to/ckpts \
-    --outdir /path/to/output/alm
+    --outdir /path/to/output/lbfgs
 ```
 
 Supported `--optimizer` values: `adam`, `lbfgs`, `alm`, `nncg`, `cl`.
@@ -193,6 +193,39 @@ python run_sweep.py \
 ```
 
 Supported `--optimizer` values: `Adam`, `LBFGS`, `Adam_NNCG`. CL is enabled via `--cl-warmup`.
+
+### FNO — 2D Poisson, single run
+
+```bash
+cd FNO
+
+# Generate data first (if not using pre-generated files):
+python utils/gen_data_poisson.py
+
+# Train FNO:
+python train.py \
+    --yaml_config config/operators_poisson_64K.yaml \
+    --config poisson_scale_k1.0_2.5_val1024_64K \
+    --root_dir /path/to/output \
+    --run_num 0 \
+    --lr 1e-3 --batch_size 128 --max_epochs 500
+```
+
+Switch to Advection-Diffusion or Helmholtz by changing `--yaml_config` and `--config` to the corresponding entries in `FNO/config/`.
+
+### CNN — ResNet-18 on CIFAR-10
+
+```bash
+cd CNN
+python run_exp.py \
+    --model ResNet18 \
+    --dataset CIFAR-10 \
+    --epochs 200 \
+    --batch_size 128 \
+    --save_model
+```
+
+Add `--visualize` to generate 3D loss landscape plots after training.
 
 
 
@@ -224,6 +257,19 @@ R=5 N_SAMPLES=500 SEED=1 GPU=2 bash experiments/run_pino_optimizer_comparison.sh
 BETA=30 N_RES=10000 bash experiments/run_pinn_optimizer_comparison.sh
 INV_B=4 HORIZON=40 bash experiments/run_node_optimizer_comparison.sh
 ```
+
+---
+
+## Acknowledgements
+
+This project builds on the following open-source repositories:
+
+- **[PINNacle](https://github.com/i207M/PINNacle)** — multi-optimizer PINN training framework (basis of `PINN/multiadam/`)
+- **[RoPINN](https://github.com/thuml/RoPINN)** — region-optimized PINNs (THUML @ Tsinghua, included as `PINN/RoPINN/`)
+- **[neuraloperator](https://github.com/neuraloperator/neuraloperator)** — FNO architecture and Darcy benchmark data format used by `PINO/` and `FNO/`
+- **[torchdiffeq](https://github.com/rtqichen/torchdiffeq)** — ODE solver backend for `NeuralODE/`
+- **[PyHessian](https://github.com/amirgholami/PyHessian)** — Hessian spectrum computation used in `CNN/`
+- **[loss-landscape](https://github.com/tomgoldstein/loss-landscape)** — loss landscape visualization methodology used in `CNN/`
 
 ---
 
