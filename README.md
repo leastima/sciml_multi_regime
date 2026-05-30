@@ -155,18 +155,16 @@ cd PINO
 # (Optional) generate data:
 python scripts/generate_darcy.py --r 10 --n_samples 1200 --seed 0
 
-# Adam warm-start (15 000 steps, saves checkpoint):
+# Adam (15 000 steps):
 python scripts/darcy_sweep.py \
     --optimizer adam --steps 15000 \
     --r 10 --n_samples 1000 --seed 0 --gpu 0 \
-    --ckpt_dir /path/to/ckpts \
     --outdir /path/to/output/adam
 
-# L-BFGS fine-tuning from the Adam checkpoint:
+# L-BFGS (standalone, from random init):
 python scripts/darcy_sweep.py \
     --optimizer lbfgs --steps 1 \
     --r 10 --n_samples 1000 --seed 0 --gpu 0 \
-    --ckpt_dir /path/to/ckpts \
     --outdir /path/to/output/lbfgs
 ```
 
