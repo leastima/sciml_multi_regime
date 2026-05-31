@@ -12,7 +12,6 @@ This repository provides the official implementation of our empirical analysis o
 - **8 physical systems**: convection, reaction, wave, reaction-diffusion, Poisson, Advection-diffusion, Darcy flow, nonlinear Pendulum.
 - **Extensive evaluation metrics**: training loss, test error, 3D loss landscape, Hessian spectrum, etc.
 
-
 ## Overview
 
 Neural networks trained under different hyperparameter settings can fall into distinct training **regimes**, with consistent behavior within regimes and qualitative differences across regimes. This paper studies such multi-regime behavior in SciML through a **regime-aware diagnostic framework** that jointly analyzes performance, training dynamics, and loss-landscape geometry.
