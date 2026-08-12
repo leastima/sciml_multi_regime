@@ -92,7 +92,7 @@ def main() -> None:
         help="PDE-loss weight in `xy_loss*data + f_loss*pde`.")
 
     # ── ALM parameters ───────────────────────────────────────────────────────
-    parser.add_argument("--alm_outer_iters",    type=int,   default=50)
+    parser.add_argument("--alm_outer_iters",    type=int,   default=20)
     parser.add_argument("--alm_inner",          type=str,   default="adam",
         choices=("lbfgs", "adam"))
     parser.add_argument("--alm_lbfgs_max_iter", type=int,   default=200)

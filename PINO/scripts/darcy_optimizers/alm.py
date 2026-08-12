@@ -60,7 +60,7 @@ def run_alm(
     cons_item: str = "pde",
     uncon_weight: float = 1.0,
     mu: float = 2.0,
-    rho: float = 1.1,
+    rho: float = 1.05,
     outer_iters: int = 20,
     inner_step: int = 200,
     # ALM inner-solver options
