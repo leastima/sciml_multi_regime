@@ -57,11 +57,11 @@ def run_alm(
     test_loader,
     cell_t0: float,
     # ALM hyper-parameters
-    cons_item: str = "pde",
+    cons_item: str = "data",
     uncon_weight: float = 1.0,
     mu: float = 2.0,
     rho: float = 1.05,
-    outer_iters: int = 20,
+    outer_iters: int = 40,
     inner_step: int = 200,
     # ALM inner-solver options
     alm_inner: str = "adam",

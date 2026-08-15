@@ -92,7 +92,7 @@ def main() -> None:
         help="PDE-loss weight in `xy_loss*data + f_loss*pde`.")
 
     # ── ALM parameters ───────────────────────────────────────────────────────
-    parser.add_argument("--alm_outer_iters",    type=int,   default=20)
+    parser.add_argument("--alm_outer_iters",    type=int,   default=40)
     parser.add_argument("--alm_inner",          type=str,   default="adam",
         choices=("lbfgs", "adam"))
     parser.add_argument("--alm_lbfgs_max_iter", type=int,   default=200)
@@ -102,7 +102,7 @@ def main() -> None:
         help="Adam inner steps per outer when --alm_inner adam.")
     parser.add_argument("--alm_pde_eps_slack",  type=float, default=0.05)
     parser.add_argument("--alm_data_eps_slack", type=float, default=0.0)
-    parser.add_argument("--alm_cons_item",      type=str,   default="pde",
+    parser.add_argument("--alm_cons_item",      type=str,   default="data",
         choices=("data", "pde"))
     parser.add_argument("--alm_uncon_weight",   type=float, default=200.0)
     parser.add_argument("--alm_mu", "--alm_mu0", type=float, default=2.0,
